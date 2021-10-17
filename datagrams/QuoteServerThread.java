@@ -44,7 +44,7 @@ public class QuoteServerThread extends Thread {
 
                 buf = dString.getBytes();
 
-		// send the response to the client at "address" and "port"
+		        // send the response to the client at "address" and "port"
                 InetAddress address = packet.getAddress();
                 int port = packet.getPort();
                 packet = new DatagramPacket(buf, buf.length, address, port);
