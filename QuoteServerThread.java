@@ -1,5 +1,3 @@
-package datagrams;
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -11,7 +9,7 @@ public class QuoteServerThread extends Thread {
     protected boolean moreQuotes = true;
 
     public QuoteServerThread() throws IOException {
-	this("QuoteServerThread");
+        this("QuoteServerThread");
     }
 
     public QuoteServerThread(String name) throws IOException {
@@ -44,14 +42,14 @@ public class QuoteServerThread extends Thread {
 
                 buf = dString.getBytes();
 
-		        // send the response to the client at "address" and "port"
+                // send the response to the client at "address" and "port"
                 InetAddress address = packet.getAddress();
                 int port = packet.getPort();
                 packet = new DatagramPacket(buf, buf.length, address, port);
                 socket.send(packet);
             } catch (IOException e) {
                 e.printStackTrace();
-		moreQuotes = false;
+                moreQuotes = false;
             }
         }
         socket.close();
@@ -62,7 +60,7 @@ public class QuoteServerThread extends Thread {
         try {
             if ((returnValue = in.readLine()) == null) {
                 in.close();
-		moreQuotes = false;
+                moreQuotes = false;
                 returnValue = "No more quotes. Goodbye.";
             }
         } catch (IOException e) {
