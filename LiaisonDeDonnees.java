@@ -1,4 +1,4 @@
-public class LiaisonDeDonnees {
+public class LiaisonDeDonnees extends Couche {
     //  implementer un crc dans l'entete
     // le crc est sur toute sauf le crc 
     // polynome generateur IEEE802.3
