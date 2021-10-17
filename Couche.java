@@ -1,20 +1,35 @@
-public abstract class Couche {
+abstract class Couche {
     private Couche coucheSuivante;
     private Couche couchePrecedante;
 
-    public Couche(Couche precedante, Couche suivante) {
-        this.couchePrecedante = precedante;
+    Couche() {
+        coucheSuivante = null;
+        couchePrecedante = null;
+    }
+
+    void suivant() {
+        if (coucheSuivante != null) {
+            coucheSuivante.handle();
+        }
+    }
+
+    void precedante() {
+        if (couchePrecedante != null) {
+            couchePrecedante.handle();
+        }
+
+    }
+
+    boolean handle() {
+        return false;
+
+    }
+
+    void setSuivante(Couche suivante) {
         this.coucheSuivante = suivante;
     }
-
-    public void suivant()
+    void setPrecedante(Couche precedante)
     {
-
-    }
-
-    public void precedante()
-    {
-
-        
+        this.couchePrecedante = precedante;
     }
 }
