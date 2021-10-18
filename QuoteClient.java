@@ -8,22 +8,14 @@ public class QuoteClient {
         //      return;
         // }s
 
-        DatagramSocket socket = new DatagramSocket();
+        Application coucheApplication = new Application();
+        Couche coucheTransport = new Transport();
+        Couche coucheliaison = new LiaisonDeDonnees();
 
+        coucheApplication.setSuivante(coucheTransport);
+        coucheTransport.setSuivante(coucheliaison);
 
-        byte[] buf = new byte[256];
-        InetAddress address = InetAddress.getByName("localhost");
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4445);
-        socket.send(packet);
-    
-            // get response
-        packet = new DatagramPacket(buf, buf.length);
-        socket.receive(packet);
+        coucheApplication.starter(true, "C:\\fred.jpg");
 
-	    // display response
-        String received = new String(packet.getData(), 0, packet.getLength());
-        System.out.println("Quote of the Moment: " + received);
-    
-        socket.close();
     }
 }
