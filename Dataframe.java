@@ -25,6 +25,10 @@ public class Dataframe {
         this._paquets = paquets;
     }
 
+    public List<Paquet> getPaquets() {
+        return this._paquets;
+    }
+
     public int getTotalSizeOfBytes() {
         return this._data.length;
     }

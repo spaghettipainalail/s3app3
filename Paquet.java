@@ -14,4 +14,12 @@ public class Paquet {
     public byte[] getData() {
         return _data;
     }
+
+    public byte[] get_data() {
+        return _data;
+    }
+
+    public void set_data(byte[] _data) {
+        this._data = _data;
+    }
 }
