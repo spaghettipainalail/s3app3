@@ -6,7 +6,7 @@ abstract class Couche {
 
     Couche() {
         coucheSuivante = null;
-        couchePrecedante = null;
+        couchePrecedente = null;
     }
 
     void handle(Dataframe data) {

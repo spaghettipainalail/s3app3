@@ -1,9 +1,12 @@
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 public class LiaisonDeDonnees extends Couche {
     public String StringToBinary(String s){
@@ -12,7 +15,7 @@ public class LiaisonDeDonnees extends Couche {
     }
     //  implementer un crc dans l'entete
     public String GetCRC (String s){
-        String CRCGenerator = "1101";
+        String CRCGenerator = "100000100110000010001110110110111";
         int generatorLength = CRCGenerator.length();
         StringBuilder encoded= new StringBuilder();
         encoded.append(s);
@@ -38,8 +41,15 @@ public class LiaisonDeDonnees extends Couche {
         return encoded.substring(encoded.length()-generatorLength+1);
     }
 
-    public boolean VerifyCRC(String s, String crc){
-        String CRCGenerator = "1101";
+    public boolean VerifyCRC(String s, String crc, Boolean errors){
+        if (errors){
+            Random rand = new Random();
+            int n = rand.nextInt(10);
+            if (n==5){
+                return false;
+            }
+        }
+        String CRCGenerator = "100000100110000010001110110110111";
         int generatorLength = CRCGenerator.length();
         StringBuilder encoded = new StringBuilder();
         encoded.append(s).append(crc);
@@ -67,11 +77,40 @@ public class LiaisonDeDonnees extends Couche {
         System.out.println("good crc");
         return true;
     }
-    // le crc est sur toute sauf le crc 
-    // polynome generateur IEEE802.3
+    // done             le crc est sur toute sauf le crc
+    // done             polynome generateur IEEE802.3
     // ajouter des stats a la fin d'un transfert sur nombre packets transmis ou recu, nb perdus et nb erreur CRC
-    // mettre des logs dans liasonDeDonnes.log de toutes les operations faite, avec le temps
-    // ajouter un fonction pour mettre des erreurs
+    // done             mettre des logs dans liasonDeDonnes.log de toutes les operations faite, avec le temps
+    // done             ajouter un fonction pour mettre des erreurs
+
+    public void log(String s){
+        //creer le fichier au besoin
+        try {
+            File myObj = new File("liasonDeDonnes.log");
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        //write
+        try {
+            FileWriter myWriter = new FileWriter("liasonDeDonnes.log", true);
+            myWriter.append(s).append("\n");
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+    @Override
+    boolean handle() {
+        return super.handle();
+    }
 
     //écrire header
     //lire header
@@ -81,10 +120,12 @@ public class LiaisonDeDonnees extends Couche {
         String b =  l.StringToBinary(s);
         System.out.println("As binary: "+b);
 
-        s = "101101110";
+        s = "10100110110000101101100011101010111010000100000011101000110111101101001";
         System.out.println("get crc: "+l.GetCRC(s));
 
-        System.out.println("verify crc: "+l.VerifyCRC(s, "011"));
-
+        System.out.println("verify crc: "+l.VerifyCRC(s, "11110111000111110100101100010011", false));
+        //exemple`101101110 devrait avoir 011 comme crc
+        //inverse:System.out.println(Byte.parseByte("01100110", 2));
+        l.log("yeeta");
     }
 }
