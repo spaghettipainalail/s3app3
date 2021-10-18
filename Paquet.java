@@ -16,4 +16,12 @@ public class Paquet {
     public void set_data(byte[] _data) {
         this._data = _data;
     }
+
+    public int get_numPaquet() {
+        return _numPaquet;
+    }
+
+    public int get_numPaquetFin() {
+        return _numPaquetFin;
+    }
 }

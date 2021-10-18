@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -128,6 +129,8 @@ public class LiaisonDeDonnees extends Couche {
         for(int i=0; i<data.getPaquets().size(); i++){
             //calculer crc
             byte[] bytes = data.getPaquets().get(i).get_data();
+            byte[] numeroPaquet = ByteBuffer.allocate(4).putInt(data.getPaquets().get(i).get_numPaquet()).array();
+            byte[] numeroPaquetFin = ByteBuffer.allocate(4).putInt(data.getPaquets().get(i).get_numPaquetFin()).array();
             String s = BytesToBinary(bytes);
             String crc = GetCRC(s);
             //nouveau packets avec crc au début
