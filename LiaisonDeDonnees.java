@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.DatagramPacket;
@@ -75,11 +77,40 @@ public class LiaisonDeDonnees extends Couche {
         System.out.println("good crc");
         return true;
     }
-    // le crc est sur toute sauf le crc 
+    // done             le crc est sur toute sauf le crc
     // done             polynome generateur IEEE802.3
     // ajouter des stats a la fin d'un transfert sur nombre packets transmis ou recu, nb perdus et nb erreur CRC
-    // mettre des logs dans liasonDeDonnes.log de toutes les operations faite, avec le temps
-    // ajouter un fonction pour mettre des erreurs
+    // done             mettre des logs dans liasonDeDonnes.log de toutes les operations faite, avec le temps
+    // done             ajouter un fonction pour mettre des erreurs
+
+    public void log(String s){
+        //creer le fichier au besoin
+        try {
+            File myObj = new File("liasonDeDonnes.log");
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        //write
+        try {
+            FileWriter myWriter = new FileWriter("liasonDeDonnes.log", true);
+            myWriter.append(s).append("\n");
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+    @Override
+    boolean handle() {
+        return super.handle();
+    }
 
     //écrire header
     //lire header
@@ -94,5 +125,7 @@ public class LiaisonDeDonnees extends Couche {
 
         System.out.println("verify crc: "+l.VerifyCRC(s, "11110111000111110100101100010011", false));
         //exemple`101101110 devrait avoir 011 comme crc
+        //inverse:System.out.println(Byte.parseByte("01100110", 2));
+        l.log("yeeta");
     }
 }

@@ -1,10 +1,10 @@
 abstract class Couche {
     private Couche coucheSuivante;
-    private Couche couchePrecedante;
+    private Couche couchePrecedente;
 
     Couche() {
         coucheSuivante = null;
-        couchePrecedante = null;
+        couchePrecedente = null;
     }
 
     void suivant() {
@@ -13,9 +13,9 @@ abstract class Couche {
         }
     }
 
-    void precedante() {
-        if (couchePrecedante != null) {
-            couchePrecedante.handle();
+    void precedente() {
+        if (couchePrecedente != null) {
+            couchePrecedente.handle();
         }
 
     }
@@ -30,6 +30,6 @@ abstract class Couche {
     }
     void setPrecedante(Couche precedante)
     {
-        this.couchePrecedante = precedante;
+        this.couchePrecedente = precedante;
     }
 }
