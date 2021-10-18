@@ -1,35 +1,19 @@
+import javax.xml.crypto.Data;
+
 abstract class Couche {
     private Couche coucheSuivante;
-    private Couche couchePrecedante;
+    private Couche couchePrecedente;
 
     Couche() {
         coucheSuivante = null;
         couchePrecedante = null;
     }
 
-    void suivant() {
-        if (coucheSuivante != null) {
-            coucheSuivante.handle();
-        }
+    void handle(Dataframe data) {
+        coucheSuivante.handle(data);
     }
 
-    void precedante() {
-        if (couchePrecedante != null) {
-            couchePrecedante.handle();
-        }
-
-    }
-
-    boolean handle() {
-        return false;
-
-    }
-
-    void setSuivante(Couche suivante) {
-        this.coucheSuivante = suivante;
-    }
-    void setPrecedante(Couche precedante)
-    {
-        this.couchePrecedante = precedante;
+    public void setSuivante(Couche coucheSuivante) {
+        this.coucheSuivante = coucheSuivante;
     }
 }

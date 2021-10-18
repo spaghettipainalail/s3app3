@@ -1,14 +1,12 @@
 import java.io.*;
 import java.net.*;
-import java.util.*;
-
 public class QuoteClient {
     public static void main(String[] args) throws IOException {
 
         // if (args.length != 1) {
         //      System.out.println("Usage: java QuoteClient <hostname>");
         //      return;
-        // }
+        // }s
 
         DatagramSocket socket = new DatagramSocket();
 

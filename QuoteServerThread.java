@@ -15,12 +15,8 @@ public class QuoteServerThread extends Thread {
     public QuoteServerThread(String name) throws IOException {
         super(name);
         socket = new DatagramSocket(4445);
-
-        try {
-            in = new BufferedReader(new FileReader("oneliners.txt"));
-        } catch (FileNotFoundException e) {
-            System.err.println("Could not open quote file. Serving time instead.");
-        }
+        System.out.println("Server started ! port 4445");
+      
     }
 
     public void run() {

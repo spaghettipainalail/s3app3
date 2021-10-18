@@ -6,28 +6,27 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Application extends Couche {
-    Application(boolean isServer, String FileName) {
+
+    Application() {
+    }
+
+    public void starter(boolean isServer, String Filename) {
 
         InputStream inStream = null;
-        BufferedInputStream bis = null;
-
+        byte[] stream = null;
         try {
-            // inStream = new FileInputStream("c:/test.txt");
-            inStream = new FileInputStream(FileName);
+            inStream = new FileInputStream(Filename);
+            BufferedInputStream in = new BufferedInputStream(inStream);
+            stream = in.readAllBytes();
+            in.close();
+
         } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        }
-
-        // input stream is converted to buffered input stream
-        bis = new BufferedInputStream(inStream);
-
-        // read number of bytes available
-        try {
-            int numByte = bis.available();
+            System.out.println("file not found !");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("file not readable !");
         }
 
+        this.handle(new Dataframe(stream, Filename));
         // this will write or read the file complety and will pass a pointer to the
         // layer transport.
     }

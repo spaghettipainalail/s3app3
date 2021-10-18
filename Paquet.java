@@ -1,17 +1,11 @@
 public class Paquet {
-    int version = 4;
-    int longueurHeader;
-    int longueurTotal;
-    int ttl;
-    int protocol;
-    int checksumEntete;
-    int ipFrom;
-    int ipTo;
-    int data;
+    private int _numPaquet;
+    private int _numPaquetFin;
+    private byte[] _data;
 
-
-
-    public Paquet(){
-
+    public Paquet(int numPaquet, int numPaquetFin, byte[] data) {
+        this._numPaquet = numPaquet;
+        this._numPaquetFin = numPaquetFin;
+        this._data = data;
     }
 }
