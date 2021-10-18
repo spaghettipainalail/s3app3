@@ -2,13 +2,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+// import java.net.DatagramPacket;
+// import java.net.DatagramSocket;
+// import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.List;
+// import java.time.LocalDateTime;
+// import java.util.List;
 import java.util.Random;
 
 public class LiaisonDeDonnees extends Couche {
@@ -99,33 +100,33 @@ public class LiaisonDeDonnees extends Couche {
     // avec le temps
     // done ajouter un fonction pour mettre des erreurs
 
-    @Override
-    void handle(Dataframe data) {
-        try {
-            DatagramSocket socket = new DatagramSocket();
+    // @Override
+    // void handle(Dataframe data) {
+    //     try {
+    //         DatagramSocket socket = new DatagramSocket();
 
-            byte[] buf = new byte[256];
-            InetAddress address = InetAddress.getByName("localhost");
-            for (int i = 0; i < data.getNbPackets(); i++) {
-                socket.send(new DatagramPacket(data.getPaquet(i).getData(), 200, address, 4445));
-            }
-            // DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4445);
-            // socket.send(packet);
+    //         byte[] buf = new byte[256];
+    //         InetAddress address = InetAddress.getByName("localhost");
+    //         for (int i = 0; i < data.getNbPackets(); i++) {
+    //             socket.send(new DatagramPacket(data.getPaquet(i).getData(), 200, address, 4445));
+    //         }
+    //         // DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4445);
+    //         // socket.send(packet);
 
-            // get response
-            packet = new DatagramPacket(buf, buf.length);
-            socket.receive(packet);
+    //         // get response
+    //         packet = new DatagramPacket(buf, buf.length);
+    //         socket.receive(packet);
 
-            // display response
-            String received = new String(packet.getData(), 0, packet.getLength());
-            System.out.println("Quote of the Moment: " + received);
+    //         // display response
+    //         String received = new String(packet.getData(), 0, packet.getLength());
+    //         System.out.println("Quote of the Moment: " + received);
 
-            socket.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+    //         socket.close();
+    //     } catch (Exception e) {
+    //         System.out.println(e);
+    //     }
 
-    }
+    // }
 
     public void log(String s) {
         // creer le fichier au besoin
