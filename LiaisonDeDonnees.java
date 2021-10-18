@@ -85,6 +85,34 @@ public class LiaisonDeDonnees extends Couche {
     // avec le temps
     // done ajouter un fonction pour mettre des erreurs
 
+    @Override
+    void handle(Dataframe data) {
+        try {
+            DatagramSocket socket = new DatagramSocket();
+
+            byte[] buf = new byte[256];
+            InetAddress address = InetAddress.getByName("localhost");
+            for (int i = 0; i < data.getNbPackets(); i++) {
+                socket.send(new DatagramPacket(data.getPaquet(i).getData(), 200, address, 4445));
+            }
+            // DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4445);
+            // socket.send(packet);
+
+            // get response
+            packet = new DatagramPacket(buf, buf.length);
+            socket.receive(packet);
+
+            // display response
+            String received = new String(packet.getData(), 0, packet.getLength());
+            System.out.println("Quote of the Moment: " + received);
+
+            socket.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
+
     public void log(String s) {
         // creer le fichier au besoin
         try {

@@ -17,11 +17,12 @@ public class Transport extends Couche {
 
         nbPaquetsRequis = (int) Math.ceil(nbPaquetsRequis / 200);
 
-        paquets.add(new Paquet(1, nbPaquetsRequis, data.getFilename().getBytes()));
+        paquets.add(
+                new Paquet(1, nbPaquetsRequis, data.getFilename().getBytes(), data.getFilename().getBytes().length));
         for (int i = 0; i < nbPaquetsRequis; i++) {
-            paquets.add(new Paquet(i+2, nbPaquetsRequis, data.getBytesArray(i*200, (i+1)*200)));
+            paquets.add(new Paquet(i + 2, nbPaquetsRequis, data.getBytesArray(i * 200, (i + 1) * 200),
+                    data.getBytesArray(i * 200, (i + 1) * 200).length));
         }
-
         data.setPaquets(paquets);
 
         this.handle(data);
