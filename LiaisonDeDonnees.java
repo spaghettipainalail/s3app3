@@ -9,43 +9,44 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class LiaisonDeDonnees extends Couche {
-    public String StringToBinary(String s){
+    public String StringToBinary(String s) {
         String binary = new BigInteger(s.getBytes()).toString(2);
         return binary;
     }
-    //  implementer un crc dans l'entete
-    public String GetCRC (String s){
+
+    // implementer un crc dans l'entete
+    public String GetCRC(String s) {
         String CRCGenerator = "100000100110000010001110110110111";
         int generatorLength = CRCGenerator.length();
-        StringBuilder encoded= new StringBuilder();
+        StringBuilder encoded = new StringBuilder();
         encoded.append(s);
 
-        //ajouter un nombre de 0 équivalent à generatorLength-1 (place du crc dans le message)
-        for (int i=1; i<=generatorLength-1; i++){
+        // ajouter un nombre de 0 équivalent à generatorLength-1 (place du crc dans le
+        // message)
+        for (int i = 1; i <= generatorLength - 1; i++) {
             encoded.append("0");
         }
-        //boucler dans les bits et faire les opérations XOR
-        for (int i=0; i<=encoded.length()-generatorLength; ){
-            for (int j=0; j<generatorLength; j++){
-                if (encoded.charAt(i+j)==CRCGenerator.charAt(j)){
-                    encoded.setCharAt(i+j, '0');
-                }
-                else {
-                    encoded.setCharAt(i+j, '1');
+        // boucler dans les bits et faire les opérations XOR
+        for (int i = 0; i <= encoded.length() - generatorLength;) {
+            for (int j = 0; j < generatorLength; j++) {
+                if (encoded.charAt(i + j) == CRCGenerator.charAt(j)) {
+                    encoded.setCharAt(i + j, '0');
+                } else {
+                    encoded.setCharAt(i + j, '1');
                 }
             }
-            if (i<encoded.length() && encoded.charAt(i)!='1'){
+            if (i < encoded.length() && encoded.charAt(i) != '1') {
                 i++;
             }
         }
-        return encoded.substring(encoded.length()-generatorLength+1);
+        return encoded.substring(encoded.length() - generatorLength + 1);
     }
 
-    public boolean VerifyCRC(String s, String crc, Boolean errors){
-        if (errors){
+    public boolean VerifyCRC(String s, String crc, Boolean errors) {
+        if (errors) {
             Random rand = new Random();
             int n = rand.nextInt(10);
-            if (n==5){
+            if (n == 5) {
                 return false;
             }
         }
@@ -54,22 +55,21 @@ public class LiaisonDeDonnees extends Couche {
         StringBuilder encoded = new StringBuilder();
         encoded.append(s).append(crc);
 
-        for (int i=0; i<=encoded.length()-generatorLength; ){
-            for (int j=0; j<generatorLength; j++){
-                if (encoded.charAt(i+j)==CRCGenerator.charAt(j)){
-                    encoded.setCharAt(i+j, '0');
-                }
-                else {
-                    encoded.setCharAt(i+j, '1');
+        for (int i = 0; i <= encoded.length() - generatorLength;) {
+            for (int j = 0; j < generatorLength; j++) {
+                if (encoded.charAt(i + j) == CRCGenerator.charAt(j)) {
+                    encoded.setCharAt(i + j, '0');
+                } else {
+                    encoded.setCharAt(i + j, '1');
                 }
             }
-            if (i<encoded.length() && encoded.charAt(i)!='1'){
+            if (i < encoded.length() && encoded.charAt(i) != '1') {
                 i++;
             }
         }
-        //vérifier si le calcul est bon
-        for (int i = 0; i<encoded.length();i++){
-            if (encoded.charAt(i)!='0'){
+        // vérifier si le calcul est bon
+        for (int i = 0; i < encoded.length(); i++) {
+            if (encoded.charAt(i) != '0') {
                 System.out.println("erreur crc");
                 return false;
             }
@@ -77,14 +77,16 @@ public class LiaisonDeDonnees extends Couche {
         System.out.println("good crc");
         return true;
     }
-    // done             le crc est sur toute sauf le crc
-    // done             polynome generateur IEEE802.3
-    // ajouter des stats a la fin d'un transfert sur nombre packets transmis ou recu, nb perdus et nb erreur CRC
-    // done             mettre des logs dans liasonDeDonnes.log de toutes les operations faite, avec le temps
-    // done             ajouter un fonction pour mettre des erreurs
+    // done le crc est sur toute sauf le crc
+    // done polynome generateur IEEE802.3
+    // ajouter des stats a la fin d'un transfert sur nombre packets transmis ou
+    // recu, nb perdus et nb erreur CRC
+    // done mettre des logs dans liasonDeDonnes.log de toutes les operations faite,
+    // avec le temps
+    // done ajouter un fonction pour mettre des erreurs
 
-    public void log(String s){
-        //creer le fichier au besoin
+    public void log(String s) {
+        // creer le fichier au besoin
         try {
             File myObj = new File("liasonDeDonnes.log");
             if (myObj.createNewFile()) {
@@ -96,7 +98,7 @@ public class LiaisonDeDonnees extends Couche {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        //write
+        // write
         try {
             FileWriter myWriter = new FileWriter("liasonDeDonnes.log", true);
             myWriter.append(s).append("\n");
@@ -107,25 +109,21 @@ public class LiaisonDeDonnees extends Couche {
             e.printStackTrace();
         }
     }
-    @Override
-    boolean handle() {
-        return super.handle();
-    }
 
-    //écrire header
-    //lire header
+    // écrire header
+    // lire header
     public static void main(String[] args) throws IOException {
         String s = "Salut toi";
         LiaisonDeDonnees l = new LiaisonDeDonnees();
-        String b =  l.StringToBinary(s);
-        System.out.println("As binary: "+b);
+        String b = l.StringToBinary(s);
+        System.out.println("As binary: " + b);
 
         s = "10100110110000101101100011101010111010000100000011101000110111101101001";
-        System.out.println("get crc: "+l.GetCRC(s));
+        System.out.println("get crc: " + l.GetCRC(s));
 
-        System.out.println("verify crc: "+l.VerifyCRC(s, "11110111000111110100101100010011", false));
-        //exemple`101101110 devrait avoir 011 comme crc
-        //inverse:System.out.println(Byte.parseByte("01100110", 2));
+        System.out.println("verify crc: " + l.VerifyCRC(s, "11110111000111110100101100010011", false));
+        // exemple`101101110 devrait avoir 011 comme crc
+        // inverse:System.out.println(Byte.parseByte("01100110", 2));
         l.log("yeeta");
     }
 }
