@@ -1,6 +1,31 @@
-import javax.swing.colorchooser.ColorChooserComponentFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Transport extends Couche {
+
+    public Transport() {
+
+    }
+
+    @Override
+    void handle(Dataframe data) {
+
+        ArrayList<Paquet> paquets = new ArrayList<Paquet>();
+        int nbPaquetsRequis = data.getTotalSizeOfBytes();
+
+        System.out.println(nbPaquetsRequis);
+
+        nbPaquetsRequis = (int) Math.ceil(nbPaquetsRequis / 200);
+
+        paquets.add(new Paquet(1, nbPaquetsRequis, data.getFilename().getBytes()));
+        for (int i = 0; i < nbPaquetsRequis; i++) {
+            paquets.add(new Paquet(i+2, nbPaquetsRequis, data.getBytesArray(i*200, (i+1)*200)));
+        }
+
+        data.setPaquets(paquets);
+
+        this.handle(data);
+    }
 
     // recoit un pointer vers le chunk de donnes (cote du sender)
     // 1. send packets

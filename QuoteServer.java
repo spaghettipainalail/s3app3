@@ -3,19 +3,19 @@ import java.io.*;
 public class QuoteServer {
     public static void main(String[] args) throws IOException {
 
-        Couche coucheApplication = new Application(true, "fred.jpg");
 
+        // TODO 
+        Application coucheApplication = new Application();
         Couche coucheTransport = new Transport();
-        coucheApplication.setSuivante(coucheTransport);
-        coucheTransport.setPrecedante(coucheApplication);
-
         Couche coucheliaison = new LiaisonDeDonnees();
+
+        coucheApplication.setSuivante(coucheTransport);
         coucheTransport.setSuivante(coucheliaison);
-        coucheliaison.setPrecedante(coucheTransport);
 
         // coucheliaison.setSuivante(this);
         // la transmission ce lanceras ici ^
 
+        coucheApplication.starter(true, "C:\\fred.jpg");
         new QuoteServerThread().start();
     }
 }
