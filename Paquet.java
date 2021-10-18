@@ -8,4 +8,12 @@ public class Paquet {
         this._numPaquetFin = numPaquetFin;
         this._data = data;
     }
+
+    public byte[] get_data() {
+        return _data;
+    }
+
+    public void set_data(byte[] _data) {
+        this._data = _data;
+    }
 }
