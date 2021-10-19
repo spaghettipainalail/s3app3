@@ -6,7 +6,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 public class SocketServeur extends Couche {
-    private String _adress;
     private int _port;
 
     public SocketServeur(int port) {
@@ -14,13 +13,14 @@ public class SocketServeur extends Couche {
     }
 
     public void starterEcouter() throws SocketException {
+        int erreurEnvois = 0;
         boolean moreQuotes = true;
         DatagramSocket socket = new DatagramSocket(4445);
         System.out.println("Server started ! port 4445");
         while (moreQuotes) {
             try {
                 // todo plus grand
-                byte[] buf = new byte[200];
+                byte[] buf = new byte[250];
 
                 // receive request
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
@@ -28,13 +28,31 @@ public class SocketServeur extends Couche {
 
                 System.out.println(new String(packet.getData()));
 
-                boolean resultat = super.recevoir(new Envoi(packet.getData()));
+                Envoi envoi = new Envoi(packet.getData());
+                Envoi retour;
+
+                boolean resultat = super.recevoir(envoi);
                 // figure out response
                 // TODO
+                if (resultat){
+                    //confirmer par paquet vide
+                    byte[] tab = null;
+                    retour = new Envoi(tab);
+                }
+                else{
+                    erreurEnvois += 1;
+                    if (erreurEnvois == 3){
+                        moreQuotes=false;
+                    }
+                    //redemander un nouveau packet
+                    envoi.decompresser(4); //enlever crc
+                    envoi.decompresser(4); //get le numero de paquet
+                    retour = new Envoi(envoi._header);
+                }
                 // send the response to the client at "address" and "port"
                 InetAddress address = packet.getAddress();
                 int port = packet.getPort();
-                packet = new DatagramPacket(buf, buf.length, address, port);
+                packet = new DatagramPacket(retour._data, retour._data.length, address, port);
                 socket.send(packet);
             } catch (Exception e) {
                 e.printStackTrace();
