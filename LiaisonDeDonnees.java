@@ -1,7 +1,16 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigInteger;
+// import java.net.DatagramPacket;
+// import java.net.DatagramSocket;
+// import java.net.InetAddress;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+// import java.time.LocalDateTime;
+// import java.util.List;
+import java.util.Random;
 
 public class LiaisonDeDonnees extends Couche {
     // ajouter des stats a la fin d'un transfert sur nombre packets transmis ou

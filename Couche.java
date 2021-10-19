@@ -9,11 +9,19 @@ abstract class Couche {
         couchePrecedente = null;
     }
 
-    void handle(Dataframe data) {
-        coucheSuivante.handle(data);
+    void recevoir(Envoi data) {
+        couchePrecedente.recevoir(data);
     }
 
-    public void setSuivante(Couche coucheSuivante) {
+    void envoyer(Envoi data) {
+        coucheSuivante.envoyer(data);
+    }
+
+    void setSuivante(Couche coucheSuivante) {
         this.coucheSuivante = coucheSuivante;
+    }
+
+    void setPrecedente(Couche couchePrecedente) {
+        this.couchePrecedente = couchePrecedente;
     }
 }
