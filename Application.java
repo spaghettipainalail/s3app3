@@ -60,17 +60,28 @@ public class Application extends Couche {
 
             try {
                 FileOutputStream writer = new FileOutputStream(nomFichierRecu);
-                for (Envoi envoi : listeDesChosesRecus) {
-                    writer.write(envoi._data);
-                }
-                writer.close();
 
-            } catch (IOException e) {
-                System.out.println("Erreur ecriture du fichier");
+                byte[] grosChunk = new byte[0];
+                for (Envoi envoi : listeDesChosesRecus) {
+                    byte[] newGrosChunk = new byte[grosChunk.length + envoi._data.length];
+                    System.arraycopy(grosChunk, 0, newGrosChunk, 0, grosChunk.length);
+                    System.arraycopy(envoi._data, 0, newGrosChunk, grosChunk.length, envoi._data.length);
+
+                    grosChunk = newGrosChunk;
+
+                }
+                // grosChunk = Base64.getDecoder().decode(grosChunk);
+                writer.write(grosChunk);
+                writer.close();
+                System.out.println("Fichier bien recu !");
+                System.exit(0);
+
+            } catch (Exception e) {
+                System.out.println("Erreur ecriture du fichier recu");
             }
 
         }
-        // TODO CHECK this ?? at the end ?
+
         return true;
     }
 }

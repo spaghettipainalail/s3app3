@@ -5,6 +5,7 @@ import java.net.DatagramSocket;
 
 public class SocketServeur extends Couche {
     private int _port;
+    Logger logger = new Logger();
 
     public SocketServeur(int port) {
         _port = port;
@@ -36,10 +37,12 @@ public class SocketServeur extends Couche {
                 // figure out response
                 // TODO
                 if (resultat) {
+                    logger.logServer("Packet bien recu: envoie d'un packet vide");
                     // confirmer par paquet vide
                     byte[] tab = new byte[246];
                     retour = new Envoi(tab);
                 } else {
+                    logger.logServer("Erreur de réception, envoie d'un packet pas vide");
                     erreurEnvois += 1;
                     if (erreurEnvois == 3) {
                         moreQuotes = false;

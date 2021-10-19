@@ -1,4 +1,5 @@
 import java.net.InetAddress;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -8,6 +9,7 @@ public class SocketClient extends Couche {
     // TODO rename couche physique
     private String _adress;
     private int _port;
+    Logger logger = new Logger();
 
     public SocketClient(String InetAddress, int port) {
         _adress = InetAddress;
@@ -29,8 +31,11 @@ public class SocketClient extends Couche {
             byte[] buf2 = new byte[246];
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
             socket.receive(packet);
-            if (Arrays.equals(packet.getData(), buf2))
+            if (Arrays.equals(packet.getData(), buf2)){
+                logger.logClient("paquet bien envoyé à: " + LocalDateTime.now());
                 return true;
+            }
+
 
             // display response
             // String received = new String(packet.getData(), 0, packet.getLength());
@@ -39,8 +44,10 @@ public class SocketClient extends Couche {
             socket.close();
         } catch (Exception e) {
             System.out.println(e);
+            logger.logClient("Exception à: " + LocalDateTime.now());
             return false;
         }
-        return true;
+        logger.logClient("Mauvaise réception: " + LocalDateTime.now());
+        return false;
     }
 }
