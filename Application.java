@@ -52,9 +52,7 @@ public class Application extends Couche {
         listeDesChosesRecus.add(data);
         Paquet packetRecu = new Paquet(data);
         if (packetRecu.get_numPaquetFin() == packetRecu.get_numPaquet()) {
-            // String text = new String(bytes, StandardCharsets.UTF_8);
-            // TODO FAIRE data =null si infos complet et si connecxtion ferme
-
+     
             Paquet paquet1 = new Paquet(listeDesChosesRecus.get(0));
             String nomFichierRecu = new String(paquet1.get_data()).replaceAll("\0", "");
 
@@ -81,7 +79,6 @@ public class Application extends Couche {
             }
 
         }
-
         return true;
     }
 }
