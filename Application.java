@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class Application extends Couche {
     private static Application _instance;
@@ -13,7 +14,6 @@ public class Application extends Couche {
     private Application() {
         listeDesChosesRecus = new ArrayList<Envoi>();
     }
-    
 
     public static Application getInstance() {
         if (_instance == null)
@@ -29,12 +29,16 @@ public class Application extends Couche {
             inStream = new FileInputStream(Filename);
             BufferedInputStream in = new BufferedInputStream(inStream);
             stream = in.readAllBytes();
+            //  stream = Base64.getEncoder().encode(stream);
             in.close();
 
         } catch (FileNotFoundException e1) {
             System.out.println("file not found !");
+            System.exit(1);
         } catch (IOException e) {
             System.out.println("file not readable !");
+            System.exit(1);
+
         }
 
         // this will write or read the file complety and will pass a pointer to the
@@ -56,17 +60,28 @@ public class Application extends Couche {
 
             try {
                 FileOutputStream writer = new FileOutputStream(nomFichierRecu);
-                for (Envoi envoi : listeDesChosesRecus) {
-                    writer.write(envoi._data);
-                }
-                writer.close();
 
-            } catch (IOException e) {
-                System.out.println("Erreur ecriture du fichier");
+                byte[] grosChunk = new byte[0];
+                for (Envoi envoi : listeDesChosesRecus) {
+                    byte[] newGrosChunk = new byte[grosChunk.length + envoi._data.length];
+                    System.arraycopy(grosChunk, 0, newGrosChunk, 0, grosChunk.length);
+                    System.arraycopy(envoi._data, 0, newGrosChunk, grosChunk.length, envoi._data.length);
+
+                    grosChunk = newGrosChunk;
+
+                }
+                // grosChunk = Base64.getDecoder().decode(grosChunk);
+                writer.write(grosChunk);
+                writer.close();
+                System.out.println("Fichier bien recu !");
+                System.exit(0);
+
+            } catch (Exception e) {
+                System.out.println("Erreur ecriture du fichier recu");
             }
 
         }
-        // TODO CHECK this ?? at the end ?
+
         return true;
     }
 }
