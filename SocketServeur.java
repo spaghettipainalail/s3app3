@@ -19,6 +19,7 @@ public class SocketServeur extends Couche {
         System.out.println("Server started ! port 4445");
         while (moreQuotes) {
             try {
+                //todo plus grand
                 byte[] buf = new byte[200];
 
                 // receive request

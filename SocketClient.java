@@ -4,6 +4,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 public class SocketClient extends Couche {
+    //TODO rename couche physique
     private String _adress;
     private int _port;
 
