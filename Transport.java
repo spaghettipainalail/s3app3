@@ -1,8 +1,11 @@
+import java.nio.charset.StandardCharsets;
 
 public class Transport extends Couche {
     private static Transport _instance;
+    private int lastPacketId;
 
     private Transport() {
+        lastPacketId = 0;
     }
 
     public static Transport getInstance() {
@@ -12,7 +15,7 @@ public class Transport extends Couche {
     }
 
     @Override
-    void envoyer(Envoi data) {
+    boolean envoyer(Envoi data) {
         int nbPaquetsRequis = data._data.length;
 
         System.out.println(nbPaquetsRequis);
@@ -21,27 +24,33 @@ public class Transport extends Couche {
 
         // paquet du filename
         byte[] dataFilename = new byte[200];
-        System.arraycopy(data._header, 0, dataFilename, 0, 200);
+        System.arraycopy(data._header, 0, dataFilename, 0, data._header.length);
         Paquet filenamePacket = new Paquet(0, nbPaquetsRequis, dataFilename);
 
-        super.handle(null);
+        data._data = filenamePacket.getDataInBytes();
+        data._header = null;
+        super.envoyer(data);
 
         for (int i = 0; i < nbPaquetsRequis; i++) {
-            new Paquet(i + 1, nbPaquetsRequis, data.getBytesArray(i * 200, (i + 1) * 200));
-
+            Paquet packToSend = new Paquet(i + 1, nbPaquetsRequis, data.getBytesArray(i * 200, (i + 1) * 200));
+            data._data = packToSend.getDataInBytes();
+            data._header = null;
+            super.envoyer(data);
         }
-    }
-
-    void handle(Dataframe data) {
-
-        super.handle(data);
+        return true;
     }
 
     @Override
     boolean recevoir(Envoi data) {
+        data.decompresser(42);
+
+        
+
+        String f = new String(data._header, StandardCharsets.UTF_8);
+        System.out.println(f);
+
         // verifier le num de paquet et si correct, send to application, if not return
         // false and paquet number
-        // data.decompresser(4);
         return super.recevoir(data);
     }
 

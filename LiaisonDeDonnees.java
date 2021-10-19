@@ -1,6 +1,3 @@
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
 
@@ -26,32 +23,25 @@ public class LiaisonDeDonnees extends Couche {
     public int totalErreurs = 0;
 
     @Override
-    void envoyer(Envoi data) {
-        DatagramSocket socket;
+    boolean envoyer(Envoi data) {
         try {
-            socket = new DatagramSocket();
 
-            InetAddress address = InetAddress.getByName("localhost");
-
-            byte[] bytes = data.get_data();
             // calculer crc
-            LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
-            byte[] newPackets = l.AddCRC(bytes);
+            LiaisonDeDonneesConverter lconv = new LiaisonDeDonneesConverter();
+            data._header = lconv.AddCRC(data._data);
 
             // envoyer au serveur
-            SocketClient socketClient = new SocketClient(address.toString(), 4445);
-            socketClient.envoyer(new Envoi(newPackets));
-
+            data.Compresser();
+            super.envoyer(data);
 
             logger.logClient("paquet" + " envoyé à: " + LocalDateTime.now());
             totalEnvois += 1;
 
-            socket.close();
         } catch (Exception e) {
             System.out.println(e);
 
         }
-        // TODO close socket
+        return true;
     }
 
     // recevoir
@@ -59,23 +49,26 @@ public class LiaisonDeDonnees extends Couche {
     @Override
     public boolean recevoir(Envoi envoi) {
         LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
-        boolean verify = l.VerifyCRC(envoi.get_data(), false);
         envoi.decompresser(4); // enlever crc
-        envoi.decompresser(4); // get le numero de paquet
+
+        // _data toute sauf le crc
+        // _header = crc
+        envoi.Compresser();
+
+        boolean verify = l.VerifyCRC(envoi._data, false);
         ByteBuffer wrapped = ByteBuffer.wrap(envoi._data); // big-endian by default
         int num = wrapped.getInt();
         if (verify) {
             boolean transportOk = super.recevoir(envoi);
             if (!transportOk) {
-                // logger.logServer("paquet #" + num + " contient un erreur de numéro de
-                // paquet");
+                logger.logServer("paquet #" + num + " contient un erreur de numéro de paquet");
             } else {
-                // logger.logServer("paquet #" + num + " bien envoyé");
+                logger.logServer("paquet #" + num + " bien envoyé");
             }
             return transportOk;
 
         } else {
-            // logger.logServer("paquet #" + num + " contient un erreur de CRC");
+            logger.logServer("paquet #" + num + " contient un erreur de CRC");
             return false;
         }
     }

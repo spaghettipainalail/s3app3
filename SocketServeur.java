@@ -19,7 +19,7 @@ public class SocketServeur extends Couche {
         while (moreQuotes) {
             try {
                 // todo plus grand
-                byte[] buf = new byte[250];
+                byte[] buf = new byte[246];
 
                 // receive request
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
@@ -27,10 +27,13 @@ public class SocketServeur extends Couche {
 
                 System.out.println(new String(packet.getData()));
 
-                Envoi envoi = new Envoi(packet.getData());
+                //donnees recu par le socket (246 octets)
+                Envoi dataRecu = new Envoi(packet.getData());
+                
                 Envoi retour;
 
-                boolean resultat = super.recevoir(envoi);
+
+                boolean resultat = super.recevoir(dataRecu);
                 // figure out response
                 // TODO
                 if (resultat) {
@@ -43,9 +46,9 @@ public class SocketServeur extends Couche {
                         moreQuotes = false;
                     }
                     // redemander un nouveau packet
-                    envoi.decompresser(4); // enlever crc
-                    envoi.decompresser(4); // get le numero de paquet
-                    retour = new Envoi(envoi._header);
+                    dataRecu.decompresser(4); // enlever crc
+                    dataRecu.decompresser(4); // get le numero de paquet
+                    retour = new Envoi(dataRecu._header);
                 }
                 // send the response to the client at "address" and "port"
                 InetAddress address = packet.getAddress();
@@ -60,24 +63,24 @@ public class SocketServeur extends Couche {
         socket.close();
     }
 
-    public void handle(Dataframe data) {
-        try {
-            DatagramSocket socket = new DatagramSocket();
+    // public void handle(Dataframe data) {
+    //     try {
+    //         DatagramSocket socket = new DatagramSocket();
 
-            byte[] buf = new byte[200];
-            InetAddress address = InetAddress.getByName("localhost");
-            for (int i = 0; i < data.getNbPackets(); i++) {
-                // socket.send(new DatagramPacket(data.getPaquet(i).get_data(), data.getPaquet(i).get_data().length,
-                //         address, 4445));
-                DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                socket.receive(packet);
-                String received = new String(packet.getData(), 0, packet.getLength());
-                System.out.println("Quote of the Moment: " + received);
-            }
-            socket.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
+    //         byte[] buf = new byte[200];
+    //         InetAddress address = InetAddress.getByName("localhost");
+    //         for (int i = 0; i < data.getNbPackets(); i++) {
+    //             // socket.send(new DatagramPacket(data.getPaquet(i).get_data(), data.getPaquet(i).get_data().length,
+    //             //         address, 4445));
+    //             DatagramPacket packet = new DatagramPacket(buf, buf.length);
+    //             socket.receive(packet);
+    //             String received = new String(packet.getData(), 0, packet.getLength());
+    //             System.out.println("Quote of the Moment: " + received);
+    //         }
+    //         socket.close();
+    //     } catch (Exception e) {
+    //         System.out.println(e);
+    //     }
+    // }
 
 }

@@ -13,13 +13,14 @@ abstract class Couche {
         return false;
     }
 
-    void envoyer(Envoi data) {
+    boolean envoyer(Envoi data) {
         coucheSuivante.envoyer(data);
+        return false;
     }
 
-    void handle(Dataframe data) {
-        coucheSuivante.handle(data);
-    }
+    // void handle(Dataframe data) {
+    //     coucheSuivante.handle(data);
+    // }
 
     void setSuivante(Couche coucheSuivante) {
         this.coucheSuivante = coucheSuivante;

@@ -14,20 +14,12 @@ public class SocketClient extends Couche {
     }
 
     @Override
-    public void envoyer(Envoi data) {
+    public boolean envoyer(Envoi data) {
         try {
             DatagramSocket socket = new DatagramSocket();
             InetAddress address = InetAddress.getByName(_adress);
 
-            int restant = data._data.length;
-            int i = 0;
-            while (restant > 0) {
-
-                socket.send(new DatagramPacket(Arrays.copyOfRange(data._data, i * 200, 200), 200, address, _port));
-
-                restant -= 200;
-                i++;
-            }
+            socket.send(new DatagramPacket(data._data, data._data.length, address, _port));
             // DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4445);
             // socket.send(packet);
 
@@ -40,8 +32,9 @@ public class SocketClient extends Couche {
             socket.close();
         } catch (Exception e) {
             System.out.println(e);
+            return false;
         }
-
+        return true;
     }
 
     public void handle(Dataframe data) {
