@@ -44,6 +44,7 @@ public class Application extends Couche {
 
     @Override
     boolean recevoir(Envoi data) {
+        listeDesChosesRecus = new ArrayList<Envoi>();
         listeDesChosesRecus.add(data);
 
         if (data == null) {

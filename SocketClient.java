@@ -2,6 +2,7 @@ import java.net.InetAddress;
 import java.util.Arrays;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.Objects;
 
 public class SocketClient extends Couche {
     // TODO rename couche physique
@@ -24,6 +25,12 @@ public class SocketClient extends Couche {
             // socket.send(packet);
 
             // get response
+            byte[] buf = new byte[246];
+            byte[] buf2 = new byte[246];
+            DatagramPacket packet = new DatagramPacket(buf, buf.length);
+            socket.receive(packet);
+            if (Arrays.equals(packet.getData(), buf2))
+                return true;
 
             // display response
             // String received = new String(packet.getData(), 0, packet.getLength());
@@ -37,23 +44,23 @@ public class SocketClient extends Couche {
         return true;
     }
 
-    public void handle(Dataframe data) {
-        try {
-            DatagramSocket socket = new DatagramSocket();
+    // public void handle(Dataframe data) {
+    //     try {
+    //         DatagramSocket socket = new DatagramSocket();
 
-            byte[] buf = new byte[200];
-            InetAddress address = InetAddress.getByName("localhost");
-            for (int i = 0; i < data.getNbPackets(); i++) {
-                byte[] pack = data.getPaquet(i).getDataInBytes();
-                socket.send(new DatagramPacket(pack, pack.length, address, 4445));
-                DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                socket.receive(packet);
-                String received = new String(packet.getData(), 0, packet.getLength());
-                System.out.println("Quote of the Moment: " + received);
-            }
-            socket.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
+    //         byte[] buf = new byte[200];
+    //         InetAddress address = InetAddress.getByName("localhost");
+    //         for (int i = 0; i < data.getNbPackets(); i++) {
+    //             byte[] pack = data.getPaquet(i).getDataInBytes();
+    //             socket.send(new DatagramPacket(pack, pack.length, address, 4445));
+    //             DatagramPacket packet = new DatagramPacket(buf, buf.length);
+    //             socket.receive(packet);
+    //             String received = new String(packet.getData(), 0, packet.getLength());
+    //             System.out.println("Quote of the Moment: " + received);
+    //         }
+    //         socket.close();
+    //     } catch (Exception e) {
+    //         System.out.println(e);
+    //     }
+    // }
 }

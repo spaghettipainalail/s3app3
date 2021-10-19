@@ -9,17 +9,22 @@ abstract class Couche {
     }
 
     boolean recevoir(Envoi data) {
+        if (couchePrecedente == null)
+            return false;
         couchePrecedente.recevoir(data);
-        return false;
+        return true;
+
     }
 
     boolean envoyer(Envoi data) {
+        if (coucheSuivante == null)
+            return false;
         coucheSuivante.envoyer(data);
-        return false;
+        return true;
     }
 
     // void handle(Dataframe data) {
-    //     coucheSuivante.handle(data);
+    // coucheSuivante.handle(data);
     // }
 
     void setSuivante(Couche coucheSuivante) {

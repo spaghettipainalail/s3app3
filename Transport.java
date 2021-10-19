@@ -44,10 +44,10 @@ public class Transport extends Couche {
     boolean recevoir(Envoi data) {
         data.decompresser(42);
 
-        
-
-        String f = new String(data._header, StandardCharsets.UTF_8);
-        System.out.println(f);
+        Paquet packetRecu = new Paquet(data);
+        System.out.println(packetRecu.get_size());
+        System.out.println(packetRecu.get_numPaquet());
+        System.out.println(packetRecu.get_numPaquetFin());
 
         // verifier le num de paquet et si correct, send to application, if not return
         // false and paquet number

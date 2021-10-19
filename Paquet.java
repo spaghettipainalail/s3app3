@@ -1,9 +1,11 @@
+import java.nio.charset.StandardCharsets;
+
 public class Paquet {
-    //header tcp
+    // header tcp
     private int _numPaquet;
     private int _numPaquetFin;
     private int _size;
-    //data
+    // data
     private byte[] _data;
 
     public Paquet(int numPaquet, int numPaquetFin, byte[] data) {
@@ -17,9 +19,15 @@ public class Paquet {
         byte[] size = new byte[14];
         byte[] numPaquet = new byte[14];
         byte[] numPaquetFin = new byte[14];
-        System.arraycopy(("nump:" + _numPaquet).getBytes(), 0, numPaquet, 0, ("nump:" + _numPaquet).getBytes().length);
-        System.arraycopy(("size:" + _data.length).getBytes(), 0, size, 0, ("size:" + _data.length).getBytes().length);
-        System.arraycopy(("numf:" + _numPaquetFin).getBytes(), 0, numPaquetFin, 0, ("numf:" + _numPaquetFin).getBytes().length);
+        try {
+            System.arraycopy(("nump:" + _numPaquet).getBytes("UTF-8"), 0, numPaquet, 0,
+                    ("nump:" + _numPaquet).getBytes().length);
+            System.arraycopy(("size:" + _data.length).getBytes("UTF-8"), 0, size, 0,
+                    ("size:" + _data.length).getBytes().length);
+            System.arraycopy(("numf:" + _numPaquetFin).getBytes("UTF-8"), 0, numPaquetFin, 0,
+                    ("numf:" + _numPaquetFin).getBytes().length);
+        } catch (Exception e) {
+        }
 
         byte[] newData = new byte[(14 * 3) + _data.length];
 
@@ -38,14 +46,18 @@ public class Paquet {
         byte[] numPaquetFin = new byte[14];
         this._data = data._data;
 
-        System.arraycopy(numPaquet, 0, data._header, 0, 14);
-        System.arraycopy(numPaquetFin, 0,  data._header, 14, 14);
-        System.arraycopy(size, 0,  data._header, 28, 14);
+        System.arraycopy(data._header, 0, numPaquet, 0, 14);
+        System.arraycopy(data._header, 14, numPaquetFin, 0, 14);
+        System.arraycopy(data._header, 28, size, 0, 14);
 
-        
+        numPaquet = new String(numPaquet).replaceAll("\0", "").getBytes();
+        numPaquetFin = new String(numPaquetFin).replaceAll("\0", "").getBytes();
+        size = new String(size).replaceAll("\0", "").getBytes();
 
+        _size = Integer.parseInt(new String(size, StandardCharsets.UTF_8).split(":")[1]);
+        _numPaquet = Integer.parseInt(new String(numPaquet, StandardCharsets.UTF_8).split(":")[1]);
+        _numPaquetFin = Integer.parseInt(new String(numPaquetFin, StandardCharsets.UTF_8).split(":")[1]);
     }
-
 
     public int get_numPaquet() {
         return _numPaquet;

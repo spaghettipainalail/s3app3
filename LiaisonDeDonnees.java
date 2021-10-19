@@ -49,16 +49,14 @@ public class LiaisonDeDonnees extends Couche {
     @Override
     public boolean recevoir(Envoi envoi) {
         LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
-        envoi.decompresser(4); // enlever crc
-
         // _data toute sauf le crc
         // _header = crc
-        envoi.Compresser();
 
         boolean verify = l.VerifyCRC(envoi._data, false);
         ByteBuffer wrapped = ByteBuffer.wrap(envoi._data); // big-endian by default
         int num = wrapped.getInt();
         if (verify) {
+            envoi.decompresser(4); // enlever crc
             boolean transportOk = super.recevoir(envoi);
             if (!transportOk) {
                 logger.logServer("paquet #" + num + " contient un erreur de numéro de paquet");
