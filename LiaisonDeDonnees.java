@@ -56,7 +56,7 @@ public class LiaisonDeDonnees extends Couche {
         verify = false;
         ByteBuffer wrapped = ByteBuffer.wrap(envoi._data); // big-endian by default
 
-        //Todo: bon numéro de paquet
+        //Todo: bon numéro de packet
         int num = wrapped.getInt();
         if (verify) {
             envoi.decompresser(4); // enlever crc
