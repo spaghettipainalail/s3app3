@@ -22,7 +22,7 @@ public class Transport extends Couche {
         if (originalData == null)
             originalData = data;
 
-        System.out.println(nbPaquetsRequis);
+        // System.out.println(nbPaquetsRequis);
 
         nbPaquetsRequis = (int) Math.ceil(nbPaquetsRequis / 200);
 
@@ -57,12 +57,13 @@ public class Transport extends Couche {
         data.decompresser(42);
 
         Paquet packetRecu = new Paquet(data);
-        System.out.println(packetRecu.get_size());
+        // System.out.println(packetRecu.get_size());
         System.out.println(packetRecu.get_numPaquet());
-        System.out.println(packetRecu.get_numPaquetFin());
+        // System.out.println(packetRecu.get_numPaquetFin());
 
         // verifier le num de paquet et si correct, send to application, if not return
         // false and paquet number
+ 
         return super.recevoir(data);
     }
 

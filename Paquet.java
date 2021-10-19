@@ -70,4 +70,8 @@ public class Paquet {
     public int get_size() {
         return _size;
     }
+
+    public byte[] get_data() {
+        return _data;
+    }
 }

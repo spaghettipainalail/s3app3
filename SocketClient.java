@@ -43,24 +43,4 @@ public class SocketClient extends Couche {
         }
         return true;
     }
-
-    // public void handle(Dataframe data) {
-    //     try {
-    //         DatagramSocket socket = new DatagramSocket();
-
-    //         byte[] buf = new byte[200];
-    //         InetAddress address = InetAddress.getByName("localhost");
-    //         for (int i = 0; i < data.getNbPackets(); i++) {
-    //             byte[] pack = data.getPaquet(i).getDataInBytes();
-    //             socket.send(new DatagramPacket(pack, pack.length, address, 4445));
-    //             DatagramPacket packet = new DatagramPacket(buf, buf.length);
-    //             socket.receive(packet);
-    //             String received = new String(packet.getData(), 0, packet.getLength());
-    //             System.out.println("Quote of the Moment: " + received);
-    //         }
-    //         socket.close();
-    //     } catch (Exception e) {
-    //         System.out.println(e);
-    //     }
-    // }
 }

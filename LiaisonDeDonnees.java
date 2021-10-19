@@ -70,27 +70,4 @@ public class LiaisonDeDonnees extends Couche {
             return false;
         }
     }
-
-    // public static void main(String[] args) throws IOException {
-    // //tests
-    // String s="Salut toi comment ca va tu bien colisss";
-    // String binary = new BigInteger(s.getBytes()).toString(2);
-    // byte[] bytes = s.getBytes();
-    // System.out.println("b4 crc: ");
-    // for (int i=0; i<bytes.length; i++){
-    // System.out.print(bytes[i]+ ", "); //afficher sous forme 95, 81, 43
-    // }
-
-    // LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
-    // byte[] withCRC = l.AddCRC(bytes);
-    // System.out.println("with crc: ");
-    // for (int i=0; i<withCRC.length; i++){
-    // System.out.print(withCRC[i]+", "); //afficher sous forme 01100110 11001100
-    // }
-    // System.out.println();
-    // //trouver crc
-    // System.out.println("crc avec GetCRC() au debut: "+l.GetCRC(binary));
-    // String binairyData=l.BytesToBinary(withCRC);
-    // System.out.println("verify crc: " + l.VerifyCRC(withCRC, false));
-    // }
 }
