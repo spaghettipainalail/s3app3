@@ -62,5 +62,4 @@ public class SocketClient extends Couche {
             System.out.println(e);
         }
     }
-
 }
