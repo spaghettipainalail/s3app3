@@ -32,7 +32,8 @@ public class Logger {
         log(s, "liasonDeDonnesServeur.log");
     }
 
-    public void writeCode(String s, String file){
-        log(s, file);
+    public void logServer(String s){
+        log(s, "liasonDeDonnesClient.log");
     }
+
 }
