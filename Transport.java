@@ -26,6 +26,13 @@ public class Transport extends Couche {
         super.handle(data);
     }
 
+    @Override
+    boolean recevoir(Envoi data) {
+        // verifier le num de paquet et si correct, send to application, if not return false and paquet number
+        // data.decompresser(4);
+        return super.recevoir(data);
+    }
+
     // recoit un pointer vers le chunk de donnes (cote du sender)
     // 1. send packets
     // 1.1 CLIENT: send first packet with filename without directory (current

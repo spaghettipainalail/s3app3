@@ -28,9 +28,9 @@ public class SocketServeur extends Couche {
 
                 System.out.println(new String(packet.getData()));
 
-                super.recevoir(new Envoi(packet.getData()));
+                boolean resultat = super.recevoir(new Envoi(packet.getData()));
                 // figure out response
-
+                // TODO
                 // send the response to the client at "address" and "port"
                 InetAddress address = packet.getAddress();
                 int port = packet.getPort();
