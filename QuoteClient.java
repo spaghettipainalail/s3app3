@@ -1,11 +1,11 @@
 import java.io.*;
-import java.net.*;
+
 public class QuoteClient {
     public static void main(String[] args) throws IOException {
 
         // if (args.length != 1) {
-        //      System.out.println("Usage: java QuoteClient <hostname>");
-        //      return;
+        // System.out.println("Usage: java QuoteClient <hostname>");
+        // return;
         // }s
 
         Application coucheApplication = new Application();
@@ -14,6 +14,9 @@ public class QuoteClient {
 
         coucheApplication.setSuivante(coucheTransport);
         coucheTransport.setSuivante(coucheliaison);
+
+        Couche socketClient = new SocketClient("localhost", 4445);
+        coucheliaison.setSuivante(socketClient);
 
         coucheApplication.starter(true, "C:\\fred.jpg");
 

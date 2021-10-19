@@ -17,6 +17,10 @@ abstract class Couche {
         coucheSuivante.envoyer(data);
     }
 
+    void handle(Dataframe data) {
+        coucheSuivante.handle(data);
+    }
+
     void setSuivante(Couche coucheSuivante) {
         this.coucheSuivante = coucheSuivante;
     }
