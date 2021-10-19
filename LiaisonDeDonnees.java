@@ -18,7 +18,8 @@ import java.util.Random;
 public class LiaisonDeDonnees extends Couche {
     // ajouter des stats a la fin d'un transfert sur nombre packets transmis ou
     // recu, nb perdus et nb erreur CRC
-    // done mettre des logs dans liasonDeDonnes.log de toutes les operations faite, avec le temps
+    // done mettre des logs dans liasonDeDonnes.log de toutes les operations faite,
+    // avec le temps
 
     public void log(String s) {
         // creer le fichier au besoin
@@ -53,56 +54,56 @@ public class LiaisonDeDonnees extends Couche {
             byte[] buf = new byte[256];
 
             byte[] bytes = data.get_data();
-            //calculer crc
+            // calculer crc
             LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
             byte[] newPackets = l.AddCRC(bytes);
-            //envoyer au serveur
-            log("paquet #" + " envoyé à: "+ LocalDateTime.now());
+            // envoyer au serveur
+            log("paquet #" + " envoyé à: " + LocalDateTime.now());
             socket.send(new DatagramPacket(newPackets, newPackets.length, address, 4445));
 
-            //recevoir
+            // recevoir
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
             socket.receive(packet);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    //recevoir
-    //verify
+    // recevoir
+    // verify
     @Override
-    void recevoir(Envoi envoi){
+    public boolean recevoir(Envoi envoi) {
         LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
         boolean verify = l.VerifyCRC(envoi.get_data(), false);
-        if (verify){
-            //return super.recevoir(envoi);
-        }
-        else {
-            //return false;
+        if (verify) {
+            return super.recevoir(envoi);
+            
+        } else {
+            return false;
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        //tests
-        String s="Salut toi comment ca va tu bien colisss";
-        String binary = new BigInteger(s.getBytes()).toString(2);
-        byte[] bytes = s.getBytes();
-        System.out.println("b4 crc: ");
-        for (int i=0; i<bytes.length; i++){
-            System.out.print(bytes[i]+ ", "); //afficher sous forme 95, 81, 43
-        }
+    // public static void main(String[] args) throws IOException {
+    // //tests
+    // String s="Salut toi comment ca va tu bien colisss";
+    // String binary = new BigInteger(s.getBytes()).toString(2);
+    // byte[] bytes = s.getBytes();
+    // System.out.println("b4 crc: ");
+    // for (int i=0; i<bytes.length; i++){
+    // System.out.print(bytes[i]+ ", "); //afficher sous forme 95, 81, 43
+    // }
 
-        LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
-        byte[] withCRC = l.AddCRC(bytes);
-        System.out.println("with crc: ");
-        for (int i=0; i<withCRC.length; i++){
-            System.out.print(withCRC[i]+", "); //afficher sous forme 01100110 11001100
-        }
-        System.out.println();
-        //trouver crc
-        System.out.println("crc avec GetCRC() au debut: "+l.GetCRC(binary));
-        String binairyData=l.BytesToBinary(withCRC);
-        System.out.println("verify crc: " + l.VerifyCRC(withCRC, false));
-    }
+    // LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
+    // byte[] withCRC = l.AddCRC(bytes);
+    // System.out.println("with crc: ");
+    // for (int i=0; i<withCRC.length; i++){
+    // System.out.print(withCRC[i]+", "); //afficher sous forme 01100110 11001100
+    // }
+    // System.out.println();
+    // //trouver crc
+    // System.out.println("crc avec GetCRC() au debut: "+l.GetCRC(binary));
+    // String binairyData=l.BytesToBinary(withCRC);
+    // System.out.println("verify crc: " + l.VerifyCRC(withCRC, false));
+    // }
 }
