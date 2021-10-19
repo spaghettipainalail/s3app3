@@ -55,6 +55,8 @@ public class LiaisonDeDonnees extends Couche {
         boolean verify = l.VerifyCRC(envoi._data, false);
         verify = false;
         ByteBuffer wrapped = ByteBuffer.wrap(envoi._data); // big-endian by default
+
+        //Todo: bon numéro de paquet
         int num = wrapped.getInt();
         if (verify) {
             envoi.decompresser(4); // enlever crc
