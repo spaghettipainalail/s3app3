@@ -61,7 +61,37 @@ public class LiaisonDeDonneesConverter {
         return encoded.substring(encoded.length() - generatorLength + 1);
     }
 
-    public boolean VerifyCRC(String s, String crc, Boolean errors) {
+    public boolean VerifyCRC(byte[] data, Boolean errors) {
+        String binairyData=BytesToBinary(data);
+        System.out.println("data dans classe: "+ binairyData);
+
+        byte[] textArray = new byte[data.length-4];
+        for (int i=0;i< textArray.length; i++){
+            textArray[i]= data[i+4]; //textArray est le contenu sans le crc
+        }
+        String text = new String(textArray, StandardCharsets.UTF_8);  //le texte sous format "Salut"
+        System.out.println("reprise tu texte dans la classe: "+ text);
+        String binaryText = new BigInteger(text.getBytes()).toString(2);    //texte sous format "011101101011101001101001"
+        System.out.println("string binaire du texte: "+ binaryText);
+
+        byte[] crcArray = new byte[4];
+        for (int i=0;i< 4; i++){
+            crcArray[i]= data[i];
+            System.out.println("crc array: "+ crcArray[i]);
+        }
+        byte[] test = {-90, -62, -40, -22};
+        String test2 = BytesToBinary(test);
+        System.out.println("test2: "+test2);
+        String bruh = BytesToBinary(crcArray);
+        System.out.println("bruh: "+ bruh);
+        String realCrcBinaryText = new BigInteger(crcArray).toString(2);
+        System.out.println("real crc: "+ realCrcBinaryText);
+
+        String dataString = BytesToBinary(textArray);
+        System.out.println("datastring: "+ dataString);
+        String testcrc = GetCRC(dataString);
+        System.out.println("crc avec get CRC: "+ testcrc);
+
         if (errors) {
             Random rand = new Random();
             int n = rand.nextInt(10);
@@ -72,7 +102,8 @@ public class LiaisonDeDonneesConverter {
         String CRCGenerator = "100000100110000010001110110110111";
         int generatorLength = CRCGenerator.length();
         StringBuilder encoded = new StringBuilder();
-        encoded.append(s).append(crc);
+
+        encoded.append(binaryText).append(testcrc);
 
         for (int i = 0; i <= encoded.length() - generatorLength;) {
             for (int j = 0; j < generatorLength; j++) {
@@ -86,6 +117,7 @@ public class LiaisonDeDonneesConverter {
                 i++;
             }
         }
+        System.out.println("encoded: "+encoded);
         // vérifier si le calcul est bon
         for (int i = 0; i < encoded.length(); i++) {
             if (encoded.charAt(i) != '0') {
