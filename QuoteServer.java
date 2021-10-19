@@ -1,11 +1,10 @@
 import java.io.*;
-import java.net.Socket;
 
 public class QuoteServer {
     public static void main(String[] args) throws IOException {
 
         Couche liaison = new LiaisonDeDonnees();
-        Couche transport = new Transport();
+        Couche transport = Transport.getInstance();
         Couche application = Application.getInstance();
         Couche socketServeur = new SocketServeur(4445);
 

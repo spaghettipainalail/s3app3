@@ -1,6 +1,3 @@
-import javax.xml.crypto.Data;
-
-import jdk.jfr.BooleanFlag;
 
 abstract class Couche {
     private Couche coucheSuivante;

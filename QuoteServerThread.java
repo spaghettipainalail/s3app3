@@ -1,6 +1,5 @@
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 public class QuoteServerThread extends Thread {
     private SocketServeur instance;

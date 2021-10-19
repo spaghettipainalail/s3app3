@@ -11,16 +11,21 @@ public class Paquet {
         this._size = size;
     }
 
-    public byte[] getData() {
-        return _data;
-    }
+    public byte[] getDataInBytes() {
 
-    public byte[] get_data() {
-        return _data;
-    }
+        byte[] size, numPaquet, numPaquetFin = new byte[14];
+        numPaquet = ("nump:" + _numPaquet).getBytes();
+        size = ("size:" + _data.length).getBytes();
+        numPaquetFin = ("numf:" + _numPaquetFin).getBytes();
 
-    public void set_data(byte[] _data) {
-        this._data = _data;
+        byte[] newData = new byte[(14 * 3) + _data.length];
+
+        System.arraycopy(numPaquet, 0, newData, 0, 14);
+        System.arraycopy(numPaquetFin, 0, newData, 14, 14);
+        System.arraycopy(size, 0, newData, 28, 14);
+        System.arraycopy(_data, 0, newData, 42, _data.length);
+
+        return newData;
     }
 
     public int get_numPaquet() {

@@ -1,7 +1,5 @@
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.Arrays;
-import java.io.BufferedReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
@@ -15,7 +13,7 @@ public class SocketServeur extends Couche {
     public void starterEcouter() throws SocketException {
         int erreurEnvois = 0;
         boolean moreQuotes = true;
-        DatagramSocket socket = new DatagramSocket(4445);
+        DatagramSocket socket = new DatagramSocket(_port);
         System.out.println("Server started ! port 4445");
         while (moreQuotes) {
             try {
@@ -34,19 +32,18 @@ public class SocketServeur extends Couche {
                 boolean resultat = super.recevoir(envoi);
                 // figure out response
                 // TODO
-                if (resultat){
-                    //confirmer par paquet vide
+                if (resultat) {
+                    // confirmer par paquet vide
                     byte[] tab = null;
                     retour = new Envoi(tab);
-                }
-                else{
+                } else {
                     erreurEnvois += 1;
-                    if (erreurEnvois == 3){
-                        moreQuotes=false;
+                    if (erreurEnvois == 3) {
+                        moreQuotes = false;
                     }
-                    //redemander un nouveau packet
-                    envoi.decompresser(4); //enlever crc
-                    envoi.decompresser(4); //get le numero de paquet
+                    // redemander un nouveau packet
+                    envoi.decompresser(4); // enlever crc
+                    envoi.decompresser(4); // get le numero de paquet
                     retour = new Envoi(envoi._header);
                 }
                 // send the response to the client at "address" and "port"

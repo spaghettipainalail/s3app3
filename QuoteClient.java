@@ -6,8 +6,11 @@ public class QuoteClient {
         // if (args.length != 1) {
         // System.out.println("Usage: java QuoteClient <hostname>");
         // return;
-        // }s
-
+        // }
+        int a = Integer.MAX_VALUE;
+        String f = "size:" + a;
+        int longueur = f.getBytes().length;
+        System.out.println(longueur);
         Application coucheApplication = Application.getInstance();
         Couche coucheTransport = Transport.getInstance();
         Couche coucheliaison = new LiaisonDeDonnees();
