@@ -5,6 +5,9 @@ import java.math.BigInteger;
 // import java.net.DatagramPacket;
 // import java.net.DatagramSocket;
 // import java.net.InetAddress;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -147,53 +150,55 @@ public class LiaisonDeDonnees extends Couche {
             data.getPaquets().get(i).set_data(newPackets);
             // envoyer au serveur
             log("paquet #" + i + " envoyé à: " + LocalDateTime.now());
+
+    @Override
+    void envoyer(Envoi data) {
+        try {
+            DatagramSocket socket = new DatagramSocket();
+            InetAddress address = InetAddress.getByName("localhost");
+            byte[] buf = new byte[256];
+            for (int i = 0; i < data.get_data().length; i++) {
+                byte[] bytes = data.get_data();
+                // calculer crc
+                LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
+                byte[] newPackets = l.AddCRC(bytes);
+                // envoyer au serveur
+                log("paquet #" + i + " envoyé à: " + LocalDateTime.now());
+                socket.send(new DatagramPacket(newPackets, newPackets.length, address, 4445));
+
+                // recevoir
+                DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                socket.receive(packet);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
-        super.handle(data);
+
     }
 
-    // écrire header
-    // lire header
     public static void main(String[] args) throws IOException {
-        String s = "Salut toi";
-        LiaisonDeDonnees l = new LiaisonDeDonnees();
-        String b = l.StringToBinary(s);
-        System.out.println("As binary: " + b);
-
-        s = "10100110110000101101100011101010111010000100000011101000110111101101001"; // "Salut toi"
-        System.out.println("get crc: " + l.GetCRC(s));
-
-        System.out.println("verify crc: " + l.VerifyCRC(s, "11110111000111110100101100010011", false));
-        // exemple`101101110 devrait avoir 011 comme crc
-        // inverse:System.out.println(Byte.parseByte("01100110", 2));
-
         // tests
-        s = "Salut toi";
+        String s = "Salut toi";
+        String binary = new BigInteger(s.getBytes()).toString(2);
+        System.out.println("String binaire du texte: " + binary);
         byte[] bytes = s.getBytes();
+        System.out.println("b4 crc: ");
         for (int i = 0; i < bytes.length; i++) {
-            System.out.println(bytes[i]); // afficher sous forme 01100110 11001100
+            System.out.print(bytes[i] + ", "); // afficher sous forme 95, 81, 43
         }
+        System.out.println();
+
+        LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
+        byte[] withCRC = l.AddCRC(bytes);
+        System.out.println("with crc: ");
+        for (int i = 0; i < withCRC.length; i++) {
+            System.out.print(withCRC[i] + ", "); // afficher sous forme 01100110 11001100
+        }
+        System.out.println();
         // trouver crc
-        String s1 = l.BytesToBinary(bytes);
-        String crc = l.GetCRC(s1);
-        // ajouter crc
-        System.out.println("ajout crc");
-        byte[] newPackets = new byte[bytes.length + 4];
-        newPackets[0] = (byte) Integer.parseInt(s1.substring(0, 8), 2);
-        newPackets[1] = (byte) Integer.parseInt(s1.substring(8, 16), 2);
-        newPackets[2] = (byte) Integer.parseInt(s1.substring(16, 24), 2);
-        newPackets[3] = (byte) Integer.parseInt(s1.substring(24, 32), 2);
-
-        for (int j = 0; j < bytes.length; j++) {
-            newPackets[j + 4] = bytes[j];
-        }
-        for (int i = 0; i < newPackets.length; i++) {
-            System.out.println(newPackets[i]);
-        }
-
-        System.out.println("bytes to String: " + l.BytesToString(bytes));
-    }
-
-    public void recevoir(Envoi data) {
-        int i = 1;
+        System.out.println("crc avec GetCRC() au debut: " + l.GetCRC(binary));
+        String binairyData = l.BytesToBinary(withCRC);
+        System.out.println("tableau de data avec crc en string binaire: " + binairyData);
+        System.out.println("verify crc: " + l.VerifyCRC(withCRC, false));
     }
 }

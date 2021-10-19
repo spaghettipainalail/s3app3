@@ -26,7 +26,7 @@ public class Application extends Couche {
             System.out.println("file not readable !");
         }
 
-        this.handle(new Dataframe(stream, Filename));
+        //this.handle(new Dataframe(stream, Filename));
         // this will write or read the file complety and will pass a pointer to the
         // layer transport.
     }

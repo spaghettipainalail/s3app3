@@ -28,4 +28,12 @@ public class Envoi {
             _data = Arrays.copyOfRange(_data, tailleHeader, _data.length);
         }
     }
+
+    public byte[] get_data() {
+        return _data;
+    }
+
+    public void set_data(byte[] _data) {
+        this._data = _data;
+    }
 }
