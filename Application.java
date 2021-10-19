@@ -1,7 +1,7 @@
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class Application extends Couche {
         return _instance;
     }
 
-    public void starter(boolean isServer, String Filename) {
+    public void envoyerFichier(String Filename) {
 
         InputStream inStream = null;
         byte[] stream = null;
@@ -36,16 +36,34 @@ public class Application extends Couche {
             System.out.println("file not readable !");
         }
 
-        // this.handle(new Dataframe(stream, Filename));
         // this will write or read the file complety and will pass a pointer to the
         // layer transport.
+
+        this.envoyer(new Envoi(stream, Filename.getBytes()));
     }
 
     @Override
     boolean recevoir(Envoi data) {
         listeDesChosesRecus.add(data);
+
+        if (data == null) {
+            // String text = new String(bytes, StandardCharsets.UTF_8);
+            // TODO FAIRE data =null si infos complet et si connecxtion ferme
+
+            String nomFichierRecu = "cobol.txt";
+            try {
+                FileOutputStream writer = new FileOutputStream(nomFichierRecu);
+                for (Envoi envoi : listeDesChosesRecus) {
+                    writer.write(envoi._data);
+                }
+                writer.close();
+
+            } catch (IOException e) {
+                System.out.println("Erreur ecriture du fichier");
+            }
+
+        }
+        // TODO CHECK this ?? at the end ?
         return true;
-        // String text = new String(bytes, StandardCharsets.UTF_8);
-        // TODO FAIRE data =null si infos complet et si connecxtion ferme
     }
 }
