@@ -1,5 +1,7 @@
 import javax.xml.crypto.Data;
 
+import jdk.jfr.BooleanFlag;
+
 abstract class Couche {
     private Couche coucheSuivante;
     private Couche couchePrecedente;
@@ -9,8 +11,9 @@ abstract class Couche {
         couchePrecedente = null;
     }
 
-    void recevoir(Envoi data) {
+    boolean recevoir(Envoi data) {
         couchePrecedente.recevoir(data);
+        return false;
     }
 
     void envoyer(Envoi data) {

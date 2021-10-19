@@ -13,13 +13,13 @@ public class SocketServeur extends Couche {
         _port = port;
     }
 
-    public void recevoir() throws SocketException {
+    public void starterEcouter() throws SocketException {
         boolean moreQuotes = true;
         DatagramSocket socket = new DatagramSocket(4445);
         System.out.println("Server started ! port 4445");
         while (moreQuotes) {
             try {
-                //todo plus grand
+                // todo plus grand
                 byte[] buf = new byte[200];
 
                 // receive request

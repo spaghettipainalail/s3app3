@@ -6,7 +6,7 @@ public class QuoteServer {
 
         Couche liaison = new LiaisonDeDonnees();
         Couche transport = new Transport();
-        Couche application = new Application();
+        Couche application = Application.getInstance();
         Couche socketServeur = new SocketServeur(4445);
 
         socketServeur.setPrecedente(liaison);

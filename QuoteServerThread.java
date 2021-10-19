@@ -17,7 +17,7 @@ public class QuoteServerThread extends Thread {
 
     public void run() {
         try {
-            instance.recevoir();
+            instance.starterEcouter();
         } catch (SocketException e) {
             e.printStackTrace();
         }

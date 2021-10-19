@@ -6,8 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Application extends Couche {
+    private static Application _instance;
 
-    Application() {
+    private Application() {
+    }
+
+    public static Application getInstance() {
+        if (_instance == null)
+           _instance = new Application();
+        return _instance;
     }
 
     public void starter(boolean isServer, String Filename) {
@@ -26,7 +33,7 @@ public class Application extends Couche {
             System.out.println("file not readable !");
         }
 
-        //this.handle(new Dataframe(stream, Filename));
+        // this.handle(new Dataframe(stream, Filename));
         // this will write or read the file complety and will pass a pointer to the
         // layer transport.
     }

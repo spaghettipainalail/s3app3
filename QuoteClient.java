@@ -8,7 +8,7 @@ public class QuoteClient {
         // return;
         // }s
 
-        Application coucheApplication = new Application();
+        Application coucheApplication = Application.getInstance();
         Couche coucheTransport = new Transport();
         Couche coucheliaison = new LiaisonDeDonnees();
 
