@@ -1,11 +1,15 @@
 import java.util.Arrays;
 
 public class Envoi {
-    private byte[] _data;
-    private byte[] _header;
+    public byte[] _data;
+    public byte[] _header;
 
     public Envoi() {
 
+    }
+
+    public Envoi(byte[] data) {
+        _data = data;
     }
 
     public void Compresser() {

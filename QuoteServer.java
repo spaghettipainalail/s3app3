@@ -1,21 +1,18 @@
 import java.io.*;
+import java.net.Socket;
 
 public class QuoteServer {
     public static void main(String[] args) throws IOException {
 
+        Couche liaison = new LiaisonDeDonnees();
+        Couche transport = new Transport();
+        Couche application = new Application();
+        Couche socketServeur = new SocketServeur(4445);
 
-        // TODO 
-        Application coucheApplication = new Application();
-        Couche coucheTransport = new Transport();
-        Couche coucheliaison = new LiaisonDeDonnees();
+        socketServeur.setPrecedente(liaison);
+        liaison.setPrecedente(transport);
+        transport.setPrecedente(application);
 
-        coucheApplication.setSuivante(coucheTransport);
-        coucheTransport.setSuivante(coucheliaison);
-
-        // coucheliaison.setSuivante(this);
-        // la transmission ce lanceras ici ^
-
-        coucheApplication.starter(true, "C:\\fred.jpg");
-        new QuoteServerThread().start();
+        new QuoteServerThread((SocketServeur) socketServeur).start();
     }
 }

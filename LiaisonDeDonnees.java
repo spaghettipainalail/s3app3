@@ -24,8 +24,8 @@ public class LiaisonDeDonnees extends Couche {
     }
 
     public String BytesToBinary(byte[] bytes) {
-        String s = new String(bytes, StandardCharsets.UTF_8); //byte[] to string
-        String binary = new BigInteger(s.getBytes()).toString(2); //string to binary string: "10000110110110101"
+        String s = new String(bytes, StandardCharsets.UTF_8); // byte[] to string
+        String binary = new BigInteger(s.getBytes()).toString(2); // string to binary string: "10000110110110101"
         return binary;
     }
 
@@ -100,34 +100,6 @@ public class LiaisonDeDonnees extends Couche {
     // avec le temps
     // done ajouter un fonction pour mettre des erreurs
 
-    // @Override
-    // void handle(Dataframe data) {
-    //     try {
-    //         DatagramSocket socket = new DatagramSocket();
-
-    //         byte[] buf = new byte[256];
-    //         InetAddress address = InetAddress.getByName("localhost");
-    //         for (int i = 0; i < data.getNbPackets(); i++) {
-    //             socket.send(new DatagramPacket(data.getPaquet(i).getData(), 200, address, 4445));
-    //         }
-    //         // DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4445);
-    //         // socket.send(packet);
-
-    //         // get response
-    //         packet = new DatagramPacket(buf, buf.length);
-    //         socket.receive(packet);
-
-    //         // display response
-    //         String received = new String(packet.getData(), 0, packet.getLength());
-    //         System.out.println("Quote of the Moment: " + received);
-
-    //         socket.close();
-    //     } catch (Exception e) {
-    //         System.out.println(e);
-    //     }
-
-    // }
-
     public void log(String s) {
         // creer le fichier au besoin
         try {
@@ -153,29 +125,28 @@ public class LiaisonDeDonnees extends Couche {
         }
     }
 
-    @Override
     void handle(Dataframe data) {
-        for(int i=0; i<data.getPaquets().size(); i++){
-            //calculer crc
+        for (int i = 0; i < data.getPaquets().size(); i++) {
+            // calculer crc
             byte[] bytes = data.getPaquets().get(i).get_data();
             byte[] numeroPaquet = ByteBuffer.allocate(4).putInt(data.getPaquets().get(i).get_numPaquet()).array();
             byte[] numeroPaquetFin = ByteBuffer.allocate(4).putInt(data.getPaquets().get(i).get_numPaquetFin()).array();
             String s = BytesToBinary(bytes);
             String crc = GetCRC(s);
-            //nouveau packets avec crc au début
-            byte[] newPackets = new byte[bytes.length+4];
-            newPackets[0] = (byte)Integer.parseInt(s.substring(0, 8), 2);
-            newPackets[1] = (byte)Integer.parseInt(s.substring(8, 16), 2);
-            newPackets[2] = (byte)Integer.parseInt(s.substring(16, 24), 2);
-            newPackets[3] = (byte)Integer.parseInt(s.substring(24, 32), 2);
-            //les packets déjà présent
-            for (int j = 0; j<bytes.length; j++){
-                newPackets[j+4]=bytes[j];
+            // nouveau packets avec crc au début
+            byte[] newPackets = new byte[bytes.length + 4];
+            newPackets[0] = (byte) Integer.parseInt(s.substring(0, 8), 2);
+            newPackets[1] = (byte) Integer.parseInt(s.substring(8, 16), 2);
+            newPackets[2] = (byte) Integer.parseInt(s.substring(16, 24), 2);
+            newPackets[3] = (byte) Integer.parseInt(s.substring(24, 32), 2);
+            // les packets déjà présent
+            for (int j = 0; j < bytes.length; j++) {
+                newPackets[j + 4] = bytes[j];
             }
-            //update pour set le nouveau data avec le crc
+            // update pour set le nouveau data avec le crc
             data.getPaquets().get(i).set_data(newPackets);
-            //envoyer au serveur
-            log("paquet #"+ i + " envoyé à: "+ LocalDateTime.now());
+            // envoyer au serveur
+            log("paquet #" + i + " envoyé à: " + LocalDateTime.now());
         }
         super.handle(data);
     }
@@ -188,37 +159,41 @@ public class LiaisonDeDonnees extends Couche {
         String b = l.StringToBinary(s);
         System.out.println("As binary: " + b);
 
-        s = "10100110110000101101100011101010111010000100000011101000110111101101001"; //"Salut toi"
+        s = "10100110110000101101100011101010111010000100000011101000110111101101001"; // "Salut toi"
         System.out.println("get crc: " + l.GetCRC(s));
 
         System.out.println("verify crc: " + l.VerifyCRC(s, "11110111000111110100101100010011", false));
         // exemple`101101110 devrait avoir 011 comme crc
         // inverse:System.out.println(Byte.parseByte("01100110", 2));
 
-        //tests
-        s="Salut toi";
+        // tests
+        s = "Salut toi";
         byte[] bytes = s.getBytes();
-        for (int i=0; i<bytes.length; i++){
-            System.out.println(bytes[i]); //afficher sous forme 01100110 11001100
+        for (int i = 0; i < bytes.length; i++) {
+            System.out.println(bytes[i]); // afficher sous forme 01100110 11001100
         }
-        //trouver crc
+        // trouver crc
         String s1 = l.BytesToBinary(bytes);
         String crc = l.GetCRC(s1);
-        //ajouter crc
+        // ajouter crc
         System.out.println("ajout crc");
-        byte[] newPackets = new byte[bytes.length+4];
-        newPackets[0] = (byte)Integer.parseInt(s1.substring(0, 8), 2);
-        newPackets[1] = (byte)Integer.parseInt(s1.substring(8, 16), 2);
-        newPackets[2] = (byte)Integer.parseInt(s1.substring(16, 24), 2);
-        newPackets[3] = (byte)Integer.parseInt(s1.substring(24, 32), 2);
+        byte[] newPackets = new byte[bytes.length + 4];
+        newPackets[0] = (byte) Integer.parseInt(s1.substring(0, 8), 2);
+        newPackets[1] = (byte) Integer.parseInt(s1.substring(8, 16), 2);
+        newPackets[2] = (byte) Integer.parseInt(s1.substring(16, 24), 2);
+        newPackets[3] = (byte) Integer.parseInt(s1.substring(24, 32), 2);
 
-        for (int j = 0; j<bytes.length; j++){
-            newPackets[j+4]=bytes[j];
+        for (int j = 0; j < bytes.length; j++) {
+            newPackets[j + 4] = bytes[j];
         }
-        for (int i=0; i<newPackets.length; i++){
+        for (int i = 0; i < newPackets.length; i++) {
             System.out.println(newPackets[i]);
         }
 
-        System.out.println("bytes to String: "+l.BytesToString(bytes));
+        System.out.println("bytes to String: " + l.BytesToString(bytes));
+    }
+
+    public void recevoir(Envoi data) {
+        int i = 1;
     }
 }
