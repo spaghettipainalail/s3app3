@@ -30,4 +30,8 @@ public class Paquet {
     public int get_numPaquetFin() {
         return _numPaquetFin;
     }
+
+    public int get_size() {
+        return _size;
+    }
 }
