@@ -11,7 +11,6 @@ public class Logger {
             } else {
             }
         } catch (IOException e) {
-            
             e.printStackTrace();
         }
         // write
@@ -25,10 +24,11 @@ public class Logger {
     }
 
     public void logClient(String s){
+        log(s, "liasonDeDonnesClient.log");
     }
 
     public void logServer(String s){
-        // log(s, "liasonDeDonnesClient.log");
+        log(s, "liasonDeDonnesClient.log");
     }
 
 }

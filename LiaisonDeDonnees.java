@@ -53,6 +53,7 @@ public class LiaisonDeDonnees extends Couche {
         // _header = crc
 
         boolean verify = l.VerifyCRC(envoi._data, false);
+        verify = false;
         ByteBuffer wrapped = ByteBuffer.wrap(envoi._data); // big-endian by default
         int num = wrapped.getInt();
         if (verify) {
