@@ -4,11 +4,10 @@ public class Paquet {
     private byte[] _data;
     private int _size;
 
-    public Paquet(int numPaquet, int numPaquetFin, byte[] data, int size) {
+    public Paquet(int numPaquet, int numPaquetFin, byte[] data) {
         this._numPaquet = numPaquet;
         this._numPaquetFin = numPaquetFin;
         this._data = data;
-        this._size = size;
     }
 
     public byte[] getDataInBytes() {

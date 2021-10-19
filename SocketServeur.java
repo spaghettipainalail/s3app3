@@ -66,8 +66,8 @@ public class SocketServeur extends Couche {
             byte[] buf = new byte[200];
             InetAddress address = InetAddress.getByName("localhost");
             for (int i = 0; i < data.getNbPackets(); i++) {
-                socket.send(new DatagramPacket(data.getPaquet(i).get_data(), data.getPaquet(i).get_data().length,
-                        address, 4445));
+                // socket.send(new DatagramPacket(data.getPaquet(i).get_data(), data.getPaquet(i).get_data().length,
+                //         address, 4445));
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());

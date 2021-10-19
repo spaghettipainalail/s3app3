@@ -22,7 +22,7 @@ public class Transport extends Couche {
         // paquet du filename
         byte[] dataFilename = new byte[200];
         System.arraycopy(data._header, 0, dataFilename, 0, 200);
-        Paquet filenamePacket = new Paquet(0, nbPaquetsRequis, dataFilename, 200);
+        Paquet filenamePacket = new Paquet(0, nbPaquetsRequis, dataFilename);
 
         super.handle(null);
 
