@@ -1,34 +1,52 @@
 import java.util.ArrayList;
 
 public class Transport extends Couche {
+    private static Transport _instance;
 
-    public Transport() {
-
+    private Transport() {
     }
 
+    public static Transport getInstance() {
+        if (_instance == null)
+            _instance = new Transport();
+        return _instance;
+    }
 
-    void handle(Dataframe data) {
+    @Override
+    void envoyer(Envoi data) {
 
         ArrayList<Paquet> paquets = new ArrayList<Paquet>();
-        int nbPaquetsRequis = data.getTotalSizeOfBytes();
+        int nbPaquetsRequis = data._data.length;
 
         System.out.println(nbPaquetsRequis);
 
         nbPaquetsRequis = (int) Math.ceil(nbPaquetsRequis / 200);
 
-        paquets.add(new Paquet(0, nbPaquetsRequis, data.getFilename().getBytes(), data.getFilename().getBytes().length));
+        // paquet du filename
+        byte[] dataFilename = new byte[200];
+        System.arraycopy(data._header, 0, dataFilename,0,200);
+        paquets.add(new Paquet(0, nbPaquetsRequis, dataFilename, 200));
+
         for (int i = 0; i < nbPaquetsRequis; i++) {
             paquets.add(new Paquet(i + 1, nbPaquetsRequis, data.getBytesArray(i * 200, (i + 1) * 200),
                     data.getBytesArray(i * 200, (i + 1) * 200).length));
         }
+        System.out.println(paquets[]);
         data.setPaquets(paquets);
+
+        super.envoyer(data);
+
+    }
+
+    void handle(Dataframe data) {
 
         super.handle(data);
     }
 
     @Override
     boolean recevoir(Envoi data) {
-        // verifier le num de paquet et si correct, send to application, if not return false and paquet number
+        // verifier le num de paquet et si correct, send to application, if not return
+        // false and paquet number
         // data.decompresser(4);
         return super.recevoir(data);
     }

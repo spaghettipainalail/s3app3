@@ -12,6 +12,11 @@ public class Envoi {
         _data = data;
     }
 
+    public Envoi(byte[] data, byte[] header) {
+        _data = data;
+        _header = header;
+    }
+
     public void Compresser() {
         if (_header != null) {
             byte[] newData = new byte[_header.length + _data.length];
@@ -35,5 +40,9 @@ public class Envoi {
 
     public void set_data(byte[] _data) {
         this._data = _data;
+    }
+
+    public byte[] getBytesArray(int start, int end) {
+        return Arrays.copyOfRange(_data, start, end);
     }
 }
