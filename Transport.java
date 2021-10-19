@@ -22,7 +22,6 @@ public class Transport extends Couche {
         if (originalData == null)
             originalData = data;
 
-
         nbPaquetsRequis = (int) Math.ceil(nbPaquetsRequis / 200);
 
         // paquet du filename
@@ -56,14 +55,11 @@ public class Transport extends Couche {
         data.decompresser(42);
 
         Paquet packetRecu = new Paquet(data);
-        // System.out.println(packetRecu.get_size());
-        System.out.println(packetRecu.get_numPaquet());
-        // System.out.println(packetRecu.get_numPaquetFin());
-
-        // verifier le num de paquet et si correct, send to application, if not return
-        // false and paquet number
- 
-        return super.recevoir(data);
+        if ((lastPacketId + 1) == packetRecu.get_numPaquet()) {
+            lastPacketId = packetRecu.get_numPaquet();
+            return super.recevoir(data);
+        } else
+            return false;
     }
 
     // recoit un pointer vers le chunk de donnes (cote du sender)
