@@ -72,14 +72,14 @@ public class LiaisonDeDonnees extends Couche {
     //recevoir
     //verify
     @Override
-    void recevoir(Envoi envoi){
+    boolean recevoir(Envoi envoi){
         LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
         boolean verify = l.VerifyCRC(envoi.get_data(), false);
         if (verify){
-            //return super.recevoir(envoi);
+            return super.recevoir(envoi);
         }
         else {
-            //return false;
+            return false;
         }
     }
 
