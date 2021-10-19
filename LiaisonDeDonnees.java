@@ -75,13 +75,11 @@ public class LiaisonDeDonnees extends Couche {
         //tests
         String s="Salut toi";
         String binary = new BigInteger(s.getBytes()).toString(2);
-        System.out.println("String binaire du texte: "+ binary);
         byte[] bytes = s.getBytes();
         System.out.println("b4 crc: ");
         for (int i=0; i<bytes.length; i++){
             System.out.print(bytes[i]+ ", "); //afficher sous forme 95, 81, 43
         }
-        System.out.println();
 
         LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
         byte[] withCRC = l.AddCRC(bytes);
@@ -93,7 +91,6 @@ public class LiaisonDeDonnees extends Couche {
         //trouver crc
         System.out.println("crc avec GetCRC() au debut: "+l.GetCRC(binary));
         String binairyData=l.BytesToBinary(withCRC);
-        System.out.println("tableau de data avec crc en string binaire: "+ binairyData);
         System.out.println("verify crc: " + l.VerifyCRC(withCRC, false));
     }
 }

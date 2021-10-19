@@ -1,4 +1,5 @@
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
@@ -13,14 +14,41 @@ public class LiaisonDeDonneesConverter {
         newData[1] = (byte)Integer.parseInt(crc.substring(8, 16), 2);
         newData[2] = (byte)Integer.parseInt(crc.substring(16, 24), 2);
         newData[3] = (byte)Integer.parseInt(crc.substring(24, 32), 2);
-        System.out.println("crc dans addCRC: "+crc);
-        System.out.println("newdata1: "+newData[0]);
+
+        //long foo = BinaryToLong(crc);
+        //System.out.println("maybe: "+Long.toBinaryString(foo));
+
         //les packets déjà présent
         for (int j = 0; j<data.length; j++){
             newData[j+4]=data[j];
         }
         return newData;
     }
+
+    public static final byte[] longToByteArray(long value) {
+        return new byte[] {
+                (byte)(value >>> 24),
+                (byte)(value >>> 16),
+                (byte)(value >>> 8),
+                (byte)value};
+    }
+    public static final byte[] intToByteArray(int value) {
+        return new byte[] {
+                (byte)(value >>> 24),
+                (byte)(value >>> 16),
+                (byte)(value >>> 8),
+                (byte)value};
+    }
+
+    public long BinaryToLong(String binary) {
+        char[] numbers = binary.toCharArray();
+        long result = 0;
+        for(int i=numbers.length - 1; i>=0; i--)
+            if(numbers[i]=='1')
+                result += Math.pow(2, (numbers.length-i - 1));
+        return result;
+    }
+
     public String StringToBinary(String s) {
         String binary = new BigInteger(s.getBytes()).toString(2);
         return binary;
@@ -65,36 +93,26 @@ public class LiaisonDeDonneesConverter {
     }
 
     public boolean VerifyCRC(byte[] data, Boolean errors) {
-        String binairyData=BytesToBinary(data);
-        System.out.println("data dans classe: "+ binairyData);
-
+        //retrouver le texte
         byte[] textArray = new byte[data.length-4];
         for (int i=0;i< textArray.length; i++){
             textArray[i]= data[i+4]; //textArray est le contenu sans le crc
         }
-        String text = new String(textArray, StandardCharsets.UTF_8);  //le texte sous format "Salut"
-        System.out.println("reprise tu texte dans la classe: "+ text);
+        String text = new String(textArray, StandardCharsets.UTF_8);  //texte en clair
         String binaryText = new BigInteger(text.getBytes()).toString(2);    //texte sous format "011101101011101001101001"
-        System.out.println("string binaire du texte: "+ binaryText);
 
-        byte[] crcArray = new byte[4];
+        //retrouver le crc
+        byte[] crcArray = new byte[4]; //array qui contient les 4 bytes du CRC
         for (int i=0;i< 4; i++){
             crcArray[i]= data[i];
-            System.out.println("crc array: "+ crcArray[i]);
         }
-        byte[] test = {-90, -62, -40, -22};
-        String test2 = BytesToBinary(test);
-        System.out.println("test2: "+test2);
-        String bruh = BytesToBinary(crcArray);
-        System.out.println("bruh: "+ bruh);
-        String realCrcBinaryText = new BigInteger(crcArray).toString(2);
-        System.out.println("real crc: "+ realCrcBinaryText);
+        String s1=String.format("%8s", Integer.toBinaryString(crcArray[0] & 0xFF)).replace(' ', '0');
+        String s2=String.format("%8s", Integer.toBinaryString(crcArray[1] & 0xFF)).replace(' ', '0');
+        String s3=String.format("%8s", Integer.toBinaryString(crcArray[2] & 0xFF)).replace(' ', '0');
+        String s4=String.format("%8s", Integer.toBinaryString(crcArray[3] & 0xFF)).replace(' ', '0');
+        String bestCRC= new String(s1+s2+s3+s4); //le crc
 
-        String dataString = BytesToBinary(textArray);
-        System.out.println("datastring: "+ dataString);
-        String testcrc = GetCRC(dataString);
-        System.out.println("crc avec get CRC: "+ testcrc);
-
+        //génération d'erreurs au besoin
         if (errors) {
             Random rand = new Random();
             int n = rand.nextInt(10);
@@ -102,11 +120,12 @@ public class LiaisonDeDonneesConverter {
                 return false;
             }
         }
+
+        //Préparation à la vérification
         String CRCGenerator = "100000100110000010001110110110111";
         int generatorLength = CRCGenerator.length();
         StringBuilder encoded = new StringBuilder();
-
-        encoded.append(binaryText).append(testcrc);
+        encoded.append(binaryText).append(bestCRC);
 
         for (int i = 0; i <= encoded.length() - generatorLength;) {
             for (int j = 0; j < generatorLength; j++) {
@@ -120,7 +139,7 @@ public class LiaisonDeDonneesConverter {
                 i++;
             }
         }
-        System.out.println("encoded: "+encoded);
+        System.out.println("resultat du calcul: "+encoded);
         // vérifier si le calcul est bon
         for (int i = 0; i < encoded.length(); i++) {
             if (encoded.charAt(i) != '0') {
