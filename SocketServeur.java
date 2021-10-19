@@ -12,6 +12,7 @@ public class SocketServeur extends Couche {
 
     public void starterEcouter() throws SocketException {
         int erreurEnvois = 0;
+        int envoisTotal =0;
         boolean moreQuotes = true;
         DatagramSocket socket = new DatagramSocket(_port);
         System.out.println("Server started ! port 4445");

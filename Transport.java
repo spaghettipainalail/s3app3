@@ -27,8 +27,7 @@ public class Transport extends Couche {
         super.handle(null);
 
         for (int i = 0; i < nbPaquetsRequis; i++) {
-            new Paquet(i + 1, nbPaquetsRequis, data.getBytesArray(i * 200, (i + 1) * 200),
-                    data.getBytesArray(i * 200, (i + 1) * 200).length);
+            new Paquet(i + 1, nbPaquetsRequis, data.getBytesArray(i * 200, (i + 1) * 200));
 
         }
     }

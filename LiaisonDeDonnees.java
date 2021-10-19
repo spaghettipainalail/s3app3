@@ -5,11 +5,25 @@ import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
 
 public class LiaisonDeDonnees extends Couche {
+    private static LiaisonDeDonnees _instance;
+
+    private LiaisonDeDonnees() {
+    }
+
+    public static LiaisonDeDonnees getInstance() {
+        if (_instance == null)
+            _instance = new LiaisonDeDonnees();
+        return _instance;
+    }
+
     // ajouter des stats a la fin d'un transfert sur nombre packets transmis ou
     // recu, nb perdus et nb erreur CRC
     // done mettre des logs dans liasonDeDonnes.log de toutes les operations faite,
     // avec le temps
     Logger logger = new Logger();
+    public int totalEnvois = 0;
+    public int totalReçus = 0;
+    public int totalErreurs = 0;
 
     @Override
     void envoyer(Envoi data) {
@@ -18,19 +32,19 @@ public class LiaisonDeDonnees extends Couche {
             socket = new DatagramSocket();
 
             InetAddress address = InetAddress.getByName("localhost");
-            byte[] buf = new byte[256];
 
             byte[] bytes = data.get_data();
             // calculer crc
             LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
             byte[] newPackets = l.AddCRC(bytes);
-            // envoyer au serveur
-            logger.logClient("paquet" + " envoyé à: " + LocalDateTime.now());
-            socket.send(new DatagramPacket(newPackets, newPackets.length, address, 4445));
 
-            // recevoir
-            DatagramPacket packet = new DatagramPacket(buf, buf.length);
-            socket.receive(packet);
+            // envoyer au serveur
+            SocketClient socketClient = new SocketClient(address.toString(), 4445);
+            socketClient.envoyer(new Envoi(newPackets));
+
+
+            logger.logClient("paquet" + " envoyé à: " + LocalDateTime.now());
+            totalEnvois += 1;
 
             socket.close();
         } catch (Exception e) {

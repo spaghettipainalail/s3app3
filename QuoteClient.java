@@ -6,14 +6,15 @@ public class QuoteClient {
         // if (args.length != 1) {
         // System.out.println("Usage: java QuoteClient <hostname>");
         // return;
-        // }
-        int a = Integer.MAX_VALUE;
-        String f = "size:" + a;
-        int longueur = f.getBytes().length;
-        System.out.println(longueur);
+        // }s
+        DataInputStream in = new DataInputStream(System.in);
+        BufferedReader d = new BufferedReader(new InputStreamReader(in));
+        System.out.println("Enter file name: ");
+        String file = d.readLine();
+
         Application coucheApplication = Application.getInstance();
         Couche coucheTransport = Transport.getInstance();
-        Couche coucheliaison = new LiaisonDeDonnees();
+        Couche coucheliaison = LiaisonDeDonnees.getInstance();
 
         coucheApplication.setSuivante(coucheTransport);
         coucheTransport.setSuivante(coucheliaison);
@@ -21,7 +22,7 @@ public class QuoteClient {
         Couche socketClient = new SocketClient("localhost", 4445);
         coucheliaison.setSuivante(socketClient);
 
-        coucheApplication.envoyerFichier("C:\\fred.jpg");
-
+        coucheApplication.envoyerFichier(file);
+        //"C:\\fred.jpg"
     }
 }
