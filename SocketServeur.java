@@ -25,7 +25,7 @@ public class SocketServeur extends Couche {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
 
-                System.out.println(new String(packet.getData()));
+                // System.out.println(new String(packet.getData()));
 
                 // donnees recu par le socket (246 octets)
                 Envoi dataRecu = new Envoi(packet.getData());
@@ -61,26 +61,4 @@ public class SocketServeur extends Couche {
         }
         socket.close();
     }
-
-    // public void handle(Dataframe data) {
-    // try {
-    // DatagramSocket socket = new DatagramSocket();
-
-    // byte[] buf = new byte[200];
-    // InetAddress address = InetAddress.getByName("localhost");
-    // for (int i = 0; i < data.getNbPackets(); i++) {
-    // // socket.send(new DatagramPacket(data.getPaquet(i).get_data(),
-    // data.getPaquet(i).get_data().length,
-    // // address, 4445));
-    // DatagramPacket packet = new DatagramPacket(buf, buf.length);
-    // socket.receive(packet);
-    // String received = new String(packet.getData(), 0, packet.getLength());
-    // System.out.println("Quote of the Moment: " + received);
-    // }
-    // socket.close();
-    // } catch (Exception e) {
-    // System.out.println(e);
-    // }
-    // }
-
 }

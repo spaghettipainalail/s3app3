@@ -3,39 +3,32 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class LiaisonDeDonneesConverter {
-    public byte[] AddCRC(byte[] data){
+    public byte[] AddCRC(byte[] data) {
         String s = BytesToBinary(data);
         String crc = GetCRC(s);
         byte[] newData = new byte[4];
-        newData[0] = (byte)Integer.parseInt(crc.substring(0, 8), 2);
-        newData[1] = (byte)Integer.parseInt(crc.substring(8, 16), 2);
-        newData[2] = (byte)Integer.parseInt(crc.substring(16, 24), 2);
-        newData[3] = (byte)Integer.parseInt(crc.substring(24, 32), 2);
-  
+        newData[0] = (byte) Integer.parseInt(crc.substring(0, 8), 2);
+        newData[1] = (byte) Integer.parseInt(crc.substring(8, 16), 2);
+        newData[2] = (byte) Integer.parseInt(crc.substring(16, 24), 2);
+        newData[3] = (byte) Integer.parseInt(crc.substring(24, 32), 2);
+
         return newData;
     }
 
     public static final byte[] longToByteArray(long value) {
-        return new byte[] {
-                (byte)(value >>> 24),
-                (byte)(value >>> 16),
-                (byte)(value >>> 8),
-                (byte)value};
+        return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value };
     }
+
     public static final byte[] intToByteArray(int value) {
-        return new byte[] {
-                (byte)(value >>> 24),
-                (byte)(value >>> 16),
-                (byte)(value >>> 8),
-                (byte)value};
+        return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value };
     }
 
     public long BinaryToLong(String binary) {
         char[] numbers = binary.toCharArray();
         long result = 0;
-        for(int i=numbers.length - 1; i>=0; i--)
-            if(numbers[i]=='1')
-                result += Math.pow(2, (numbers.length-i - 1));
+        for (int i = numbers.length - 1; i >= 0; i--)
+            if (numbers[i] == '1')
+                result += Math.pow(2, (numbers.length - i - 1));
         return result;
     }
 
@@ -50,8 +43,8 @@ public class LiaisonDeDonneesConverter {
     }
 
     public String BytesToBinary(byte[] bytes) {
-        String s = new String(bytes, StandardCharsets.UTF_8); //byte[] to string
-        String binary = new BigInteger(s.getBytes()).toString(2); //string to binary string: "10000110110110101"
+        String s = new String(bytes, StandardCharsets.UTF_8); // byte[] to string
+        String binary = new BigInteger(s.getBytes()).toString(2); // string to binary string: "10000110110110101"
         return binary;
     }
 
@@ -83,26 +76,26 @@ public class LiaisonDeDonneesConverter {
     }
 
     public boolean VerifyCRC(byte[] data, Boolean errors) {
-        //retrouver le texte
-        byte[] textArray = new byte[data.length-4];
-        for (int i=0;i< textArray.length; i++){
-            textArray[i]= data[i+4]; //textArray est le contenu sans le crc
+        // retrouver le texte
+        byte[] textArray = new byte[data.length - 4];
+        for (int i = 0; i < textArray.length; i++) {
+            textArray[i] = data[i + 4]; // textArray est le contenu sans le crc
         }
-        String text = new String(textArray, StandardCharsets.UTF_8);  //texte en clair
-        String binaryText = new BigInteger(text.getBytes()).toString(2);    //texte sous format "011101101011101001101001"
+        String text = new String(textArray, StandardCharsets.UTF_8); // texte en clair
+        String binaryText = new BigInteger(text.getBytes()).toString(2); // texte sous format "011101101011101001101001"
 
-        //retrouver le crc
-        byte[] crcArray = new byte[4]; //array qui contient les 4 bytes du CRC
-        for (int i=0;i< 4; i++){
-            crcArray[i]= data[i];
+        // retrouver le crc
+        byte[] crcArray = new byte[4]; // array qui contient les 4 bytes du CRC
+        for (int i = 0; i < 4; i++) {
+            crcArray[i] = data[i];
         }
-        String s1=String.format("%8s", Integer.toBinaryString(crcArray[0] & 0xFF)).replace(' ', '0');
-        String s2=String.format("%8s", Integer.toBinaryString(crcArray[1] & 0xFF)).replace(' ', '0');
-        String s3=String.format("%8s", Integer.toBinaryString(crcArray[2] & 0xFF)).replace(' ', '0');
-        String s4=String.format("%8s", Integer.toBinaryString(crcArray[3] & 0xFF)).replace(' ', '0');
-        String bestCRC= new String(s1+s2+s3+s4); //le crc
+        String s1 = String.format("%8s", Integer.toBinaryString(crcArray[0] & 0xFF)).replace(' ', '0');
+        String s2 = String.format("%8s", Integer.toBinaryString(crcArray[1] & 0xFF)).replace(' ', '0');
+        String s3 = String.format("%8s", Integer.toBinaryString(crcArray[2] & 0xFF)).replace(' ', '0');
+        String s4 = String.format("%8s", Integer.toBinaryString(crcArray[3] & 0xFF)).replace(' ', '0');
+        String bestCRC = new String(s1 + s2 + s3 + s4); // le crc
 
-        //génération d'erreurs au besoin
+        // génération d'erreurs au besoin
         if (errors) {
             Random rand = new Random();
             int n = rand.nextInt(10);
@@ -111,7 +104,7 @@ public class LiaisonDeDonneesConverter {
             }
         }
 
-        //Préparation à la vérification
+        // Préparation à la vérification
         String CRCGenerator = "100000100110000010001110110110111";
         int generatorLength = CRCGenerator.length();
         StringBuilder encoded = new StringBuilder();
@@ -129,7 +122,7 @@ public class LiaisonDeDonneesConverter {
                 i++;
             }
         }
-        System.out.println("resultat du calcul: "+encoded);
+      
         // vérifier si le calcul est bon
         for (int i = 0; i < encoded.length(); i++) {
             if (encoded.charAt(i) != '0') {

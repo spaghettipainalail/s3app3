@@ -17,11 +17,12 @@ public class Transport extends Couche {
 
     @Override
     boolean envoyer(Envoi data) {
+        boolean retour = true;
         int nbPaquetsRequis = data._data.length;
         if (originalData == null)
             originalData = data;
 
-        System.out.println(nbPaquetsRequis);
+        // System.out.println(nbPaquetsRequis);
 
         nbPaquetsRequis = (int) Math.ceil(nbPaquetsRequis / 200);
 
@@ -39,7 +40,7 @@ public class Transport extends Couche {
             Paquet packToSend = new Paquet(i + 1, nbPaquetsRequis, originalData.getBytesArray(i * 200, (i + 1) * 200));
             envoi._data = packToSend.getDataInBytes();
             envoi._header = null;
-            boolean retour = super.envoyer(envoi);
+            retour = super.envoyer(envoi);
             if (retour == false) {
                 envoi = new Envoi();
                 packToSend = new Paquet(i + 1, nbPaquetsRequis, originalData.getBytesArray(i * 200, (i + 1) * 200));
@@ -48,7 +49,7 @@ public class Transport extends Couche {
             }
 
         }
-        return true;
+        return retour;
     }
 
     @Override
@@ -56,12 +57,13 @@ public class Transport extends Couche {
         data.decompresser(42);
 
         Paquet packetRecu = new Paquet(data);
-        System.out.println(packetRecu.get_size());
+        // System.out.println(packetRecu.get_size());
         System.out.println(packetRecu.get_numPaquet());
-        System.out.println(packetRecu.get_numPaquetFin());
+        // System.out.println(packetRecu.get_numPaquetFin());
 
         // verifier le num de paquet et si correct, send to application, if not return
         // false and paquet number
+ 
         return super.recevoir(data);
     }
 

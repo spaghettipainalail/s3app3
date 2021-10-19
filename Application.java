@@ -11,7 +11,7 @@ public class Application extends Couche {
     private ArrayList<Envoi> listeDesChosesRecus;
 
     private Application() {
-        ArrayList<Envoi> listeDesChosesRecus = new ArrayList<Envoi>();
+        listeDesChosesRecus = new ArrayList<Envoi>();
     }
 
     public static Application getInstance() {
@@ -44,14 +44,15 @@ public class Application extends Couche {
 
     @Override
     boolean recevoir(Envoi data) {
-        listeDesChosesRecus = new ArrayList<Envoi>();
         listeDesChosesRecus.add(data);
-
-        if (data == null) {
+        Paquet packetRecu = new Paquet(data);
+        if (packetRecu.get_numPaquetFin() == packetRecu.get_numPaquet()) {
             // String text = new String(bytes, StandardCharsets.UTF_8);
             // TODO FAIRE data =null si infos complet et si connecxtion ferme
 
-            String nomFichierRecu = "cobol.txt";
+            Paquet paquet1 = new Paquet(listeDesChosesRecus.get(0));
+            String nomFichierRecu = new String(paquet1.get_data()).replaceAll("\0", "");
+
             try {
                 FileOutputStream writer = new FileOutputStream(nomFichierRecu);
                 for (Envoi envoi : listeDesChosesRecus) {

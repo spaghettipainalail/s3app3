@@ -8,12 +8,10 @@ public class Logger {
         try {
             File myObj = new File(path);
             if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
             } else {
-                System.out.println("File already exists.");
             }
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            
             e.printStackTrace();
         }
         // write
@@ -21,19 +19,16 @@ public class Logger {
             FileWriter myWriter = new FileWriter(path, true);
             myWriter.append(s).append("\n");
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
-            System.out.println("An error occurred.");
             e.printStackTrace();
         }
     }
 
     public void logClient(String s){
-        log(s, "liasonDeDonnesServeur.log");
     }
 
     public void logServer(String s){
-        log(s, "liasonDeDonnesClient.log");
+        // log(s, "liasonDeDonnesClient.log");
     }
 
 }
