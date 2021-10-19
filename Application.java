@@ -13,6 +13,7 @@ public class Application extends Couche {
     private Application() {
         ArrayList<Envoi> listeDesChosesRecus = new ArrayList<Envoi>();
     }
+    
 
     public static Application getInstance() {
         if (_instance == null)

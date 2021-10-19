@@ -17,6 +17,7 @@ public class Transport extends Couche {
 
     @Override
     boolean envoyer(Envoi data) {
+        boolean retour = true;
         int nbPaquetsRequis = data._data.length;
         if (originalData == null)
             originalData = data;
@@ -39,7 +40,7 @@ public class Transport extends Couche {
             Paquet packToSend = new Paquet(i + 1, nbPaquetsRequis, originalData.getBytesArray(i * 200, (i + 1) * 200));
             envoi._data = packToSend.getDataInBytes();
             envoi._header = null;
-            boolean retour = super.envoyer(envoi);
+            retour = super.envoyer(envoi);
             if (retour == false) {
                 envoi = new Envoi();
                 packToSend = new Paquet(i + 1, nbPaquetsRequis, originalData.getBytesArray(i * 200, (i + 1) * 200));
@@ -48,7 +49,7 @@ public class Transport extends Couche {
             }
 
         }
-        return true;
+        return retour;
     }
 
     @Override
