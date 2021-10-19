@@ -25,13 +25,15 @@ public class Transport extends Couche {
         // paquet du filename
         byte[] dataFilename = new byte[200];
         System.arraycopy(data._header, 0, dataFilename,0,200);
-        paquets.add(new Paquet(0, nbPaquetsRequis, dataFilename, 200));
+        Paquet filenamePacket = new Paquet(0, nbPaquetsRequis, dataFilename, 200);
+        paquets.add(filenamePacket);
+        System.out.println(filenamePacket.getObject));
 
         for (int i = 0; i < nbPaquetsRequis; i++) {
             paquets.add(new Paquet(i + 1, nbPaquetsRequis, data.getBytesArray(i * 200, (i + 1) * 200),
                     data.getBytesArray(i * 200, (i + 1) * 200).length));
         }
-        System.out.println(paquets[]);
+        System.out.println());
         data.setPaquets(paquets);
 
         super.envoyer(data);

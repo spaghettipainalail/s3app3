@@ -9,7 +9,7 @@ public class QuoteClient {
         // }s
 
         Application coucheApplication = Application.getInstance();
-        Couche coucheTransport = new Transport();
+        Couche coucheTransport = Transport.getInstance();
         Couche coucheliaison = new LiaisonDeDonnees();
 
         coucheApplication.setSuivante(coucheTransport);
@@ -18,7 +18,7 @@ public class QuoteClient {
         Couche socketClient = new SocketClient("localhost", 4445);
         coucheliaison.setSuivante(socketClient);
 
-        coucheApplication.starter(true, "C:\\fred.jpg");
+        coucheApplication.envoyerFichier("C:\\fred.jpg");
 
     }
 }
