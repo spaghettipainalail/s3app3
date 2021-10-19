@@ -6,7 +6,7 @@ public class QuoteClient {
         DataInputStream in = new DataInputStream(System.in);
         BufferedReader d = new BufferedReader(new InputStreamReader(in));
         System.out.println("Enter file name: ");
-        String file = "C:\\fred.jpg";// d.readLine();
+        String file = "B:\\USER\\Desktop\\s3app3\\fred.txt";// d.readLine();
 
         Application coucheApplication = Application.getInstance();
         Couche coucheTransport = Transport.getInstance();

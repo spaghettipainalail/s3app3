@@ -29,12 +29,16 @@ public class Application extends Couche {
             inStream = new FileInputStream(Filename);
             BufferedInputStream in = new BufferedInputStream(inStream);
             stream = in.readAllBytes();
+            //  stream = Base64.getEncoder().encode(stream);
             in.close();
 
         } catch (FileNotFoundException e1) {
             System.out.println("file not found !");
+            System.exit(1);
         } catch (IOException e) {
             System.out.println("file not readable !");
+            System.exit(1);
+
         }
 
         // this will write or read the file complety and will pass a pointer to the

@@ -22,7 +22,6 @@ public class Transport extends Couche {
         if (originalData == null)
             originalData = data;
 
-        // System.out.println(nbPaquetsRequis);
 
         nbPaquetsRequis = (int) Math.ceil(nbPaquetsRequis / 200);
 
