@@ -20,31 +20,7 @@ public class LiaisonDeDonnees extends Couche {
     // recu, nb perdus et nb erreur CRC
     // done mettre des logs dans liasonDeDonnes.log de toutes les operations faite,
     // avec le temps
-
-    public void log(String s) {
-        // creer le fichier au besoin
-        try {
-            File myObj = new File("liasonDeDonnes.log");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-        // write
-        try {
-            FileWriter myWriter = new FileWriter("liasonDeDonnes.log", true);
-            myWriter.append(s).append("\n");
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
+    Logger logger = new Logger();
 
     @Override
     void envoyer(Envoi data) {
@@ -58,7 +34,7 @@ public class LiaisonDeDonnees extends Couche {
             LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
             byte[] newPackets = l.AddCRC(bytes);
             // envoyer au serveur
-            log("paquet #" + " envoyé à: " + LocalDateTime.now());
+            logger.logClient("paquet" + " envoyé à: " + LocalDateTime.now());
             socket.send(new DatagramPacket(newPackets, newPackets.length, address, 4445));
 
             // recevoir
@@ -76,10 +52,22 @@ public class LiaisonDeDonnees extends Couche {
     public boolean recevoir(Envoi envoi) {
         LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
         boolean verify = l.VerifyCRC(envoi.get_data(), false);
+        envoi.decompresser(4); //enlever crc
+        envoi.decompresser(4); //get le numero de paquet
+        ByteBuffer wrapped = ByteBuffer.wrap(envoi._data); // big-endian by default
+        int num = wrapped.getInt();
         if (verify) {
-            return super.recevoir(envoi);
+            boolean transportOk = super.recevoir(envoi);
+            if (!transportOk){
+                logger.logServer("paquet #"+num+" contient un erreur de numéro de paquet");
+            }
+            else {
+                logger.logServer("paquet #"+num+" bien envoyé");
+            }
+            return transportOk;
             
         } else {
+            logger.logServer("paquet #"+num+" contient un erreur de CRC");
             return false;
         }
     }
