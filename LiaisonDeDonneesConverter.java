@@ -13,6 +13,8 @@ public class LiaisonDeDonneesConverter {
         newData[1] = (byte)Integer.parseInt(crc.substring(8, 16), 2);
         newData[2] = (byte)Integer.parseInt(crc.substring(16, 24), 2);
         newData[3] = (byte)Integer.parseInt(crc.substring(24, 32), 2);
+        System.out.println("crc dans addCRC: "+crc);
+        System.out.println("newdata1: "+newData[0]);
         //les packets déjà présent
         for (int j = 0; j<data.length; j++){
             newData[j+4]=data[j];
