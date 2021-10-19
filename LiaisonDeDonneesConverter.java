@@ -6,12 +6,13 @@ public class LiaisonDeDonneesConverter {
     public byte[] AddCRC(byte[] data){
         String s = BytesToBinary(data);
         String crc = GetCRC(s);
+        System.out.println();
         //nouveau packets avec crc au début
         byte[] newData = new byte[data.length+4];
-        newData[0] = (byte)Integer.parseInt(s.substring(0, 8), 2);
-        newData[1] = (byte)Integer.parseInt(s.substring(8, 16), 2);
-        newData[2] = (byte)Integer.parseInt(s.substring(16, 24), 2);
-        newData[3] = (byte)Integer.parseInt(s.substring(24, 32), 2);
+        newData[0] = (byte)Integer.parseInt(crc.substring(0, 8), 2);
+        newData[1] = (byte)Integer.parseInt(crc.substring(8, 16), 2);
+        newData[2] = (byte)Integer.parseInt(crc.substring(16, 24), 2);
+        newData[3] = (byte)Integer.parseInt(crc.substring(24, 32), 2);
         //les packets déjà présent
         for (int j = 0; j<data.length; j++){
             newData[j+4]=data[j];
