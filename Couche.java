@@ -11,16 +11,14 @@ abstract class Couche {
     boolean recevoir(Envoi data) {
         if (couchePrecedente == null)
             return false;
-        couchePrecedente.recevoir(data);
-        return true;
+        return couchePrecedente.recevoir(data);
 
     }
 
     boolean envoyer(Envoi data) {
         if (coucheSuivante == null)
             return false;
-        coucheSuivante.envoyer(data);
-        return true;
+        return coucheSuivante.envoyer(data);
     }
 
     // void handle(Dataframe data) {

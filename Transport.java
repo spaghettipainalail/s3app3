@@ -3,6 +3,7 @@ import java.nio.charset.StandardCharsets;
 public class Transport extends Couche {
     private static Transport _instance;
     private int lastPacketId;
+    private Envoi originalData;
 
     private Transport() {
         lastPacketId = 0;
@@ -17,6 +18,8 @@ public class Transport extends Couche {
     @Override
     boolean envoyer(Envoi data) {
         int nbPaquetsRequis = data._data.length;
+        if (originalData == null)
+            originalData = data;
 
         System.out.println(nbPaquetsRequis);
 
@@ -24,18 +27,26 @@ public class Transport extends Couche {
 
         // paquet du filename
         byte[] dataFilename = new byte[200];
+
         System.arraycopy(data._header, 0, dataFilename, 0, data._header.length);
         Paquet filenamePacket = new Paquet(0, nbPaquetsRequis, dataFilename);
 
-        data._data = filenamePacket.getDataInBytes();
-        data._header = null;
-        super.envoyer(data);
+        Envoi envoiNomFichier = new Envoi(filenamePacket.getDataInBytes(), null);
+        super.envoyer(envoiNomFichier);
 
         for (int i = 0; i < nbPaquetsRequis; i++) {
-            Paquet packToSend = new Paquet(i + 1, nbPaquetsRequis, data.getBytesArray(i * 200, (i + 1) * 200));
-            data._data = packToSend.getDataInBytes();
-            data._header = null;
-            super.envoyer(data);
+            Envoi envoi = new Envoi();
+            Paquet packToSend = new Paquet(i + 1, nbPaquetsRequis, originalData.getBytesArray(i * 200, (i + 1) * 200));
+            envoi._data = packToSend.getDataInBytes();
+            envoi._header = null;
+            boolean retour = super.envoyer(envoi);
+            if (retour == false) {
+                envoi = new Envoi();
+                packToSend = new Paquet(i + 1, nbPaquetsRequis, originalData.getBytesArray(i * 200, (i + 1) * 200));
+                envoi._data = packToSend.getDataInBytes();
+                envoi._header = null;
+            }
+
         }
         return true;
     }
