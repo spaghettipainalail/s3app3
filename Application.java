@@ -50,11 +50,13 @@ public class Application extends Couche {
 
             Paquet paquet1 = new Paquet(listeDesChosesRecus.get(0));
             String nomFichierRecu = new String(paquet1.get_data()).replaceAll("\0", "");
-
+            // remove the first package who contain the title only
+            listeDesChosesRecus.remove(0);
             try {
                 FileOutputStream writer = new FileOutputStream(nomFichierRecu);
 
                 byte[] grosChunk = new byte[0];
+
                 for (Envoi envoi : listeDesChosesRecus) {
                     byte[] newGrosChunk = new byte[grosChunk.length + envoi._data.length];
                     System.arraycopy(grosChunk, 0, newGrosChunk, 0, grosChunk.length);
@@ -63,7 +65,6 @@ public class Application extends Couche {
                     grosChunk = newGrosChunk;
 
                 }
-                // grosChunk = Base64.getDecoder().decode(grosChunk);
                 writer.write(grosChunk);
                 writer.close();
                 System.out.println("Fichier bien recu !");
@@ -72,7 +73,6 @@ public class Application extends Couche {
             } catch (Exception e) {
                 System.out.println("Erreur ecriture du fichier recu");
             }
-
         }
         return true;
     }
