@@ -3,11 +3,11 @@ import java.net.SocketException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-public class SocketServeur extends Couche {
-    private int _port;
+public class CouchePhysiqueServeur extends Couche {
+    private final int _port;
     Logger logger = new Logger();
 
-    public SocketServeur(int port) {
+    public CouchePhysiqueServeur(int port) {
         _port = port;
     }
 
@@ -48,8 +48,8 @@ public class SocketServeur extends Couche {
                         moreQuotes = false;
                     }
                     // redemander un nouveau packet
-                    dataRecu.decompresser(4); // enlever crc
-                    dataRecu.decompresser(4); // get le numero de paquet
+                    dataRecu.reception(4); // enlever crc
+                    dataRecu.reception(4); // get le numero de paquet
                     retour = new Envoi(dataRecu._header);
                 }
                 // send the response to the client at "address" and "port"

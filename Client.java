@@ -1,6 +1,6 @@
 import java.io.*;
 
-public class QuoteClient {
+public class Client {
     public static void main(String[] args) throws IOException {
 
         DataInputStream in = new DataInputStream(System.in);
@@ -15,7 +15,7 @@ public class QuoteClient {
         coucheApplication.setSuivante(coucheTransport);
         coucheTransport.setSuivante(coucheliaison);
 
-        Couche socketClient = new SocketClient("localhost", 4445);
+        Couche socketClient = new CouchePhysiqueClient("localhost", 4445);
         coucheliaison.setSuivante(socketClient);
 
         coucheApplication.envoyerFichier(file);
