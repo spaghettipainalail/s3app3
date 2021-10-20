@@ -57,7 +57,6 @@ public class LiaisonDeDonnees extends Couche {
         // _header = crc
 
         boolean verify = l.VerifyCRC(envoi._data, false);
-
         // TODO: bon numéro de packet
 
         byte[] numPaquetBytes = new byte[14];

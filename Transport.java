@@ -38,10 +38,11 @@ public class Transport extends Couche {
             envoi._header = null;
             retour = super.envoyer(envoi);
             if (retour == false) {
-                envoi = new Envoi();
+                i--;
+                /*envoi = new Envoi();
                 packToSend = new Paquet(i + 1, nbPaquetsRequis, originalData.getBytesArray(i * 200, (i + 1) * 200));
                 envoi._data = packToSend.getDataInBytes();
-                envoi._header = null;
+                envoi._header = null;*/
             }
 
         }
