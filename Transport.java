@@ -51,8 +51,9 @@ public class Transport extends Couche {
     @Override
     boolean recevoir(Envoi data) {
         data.reception(42);
-
         Paquet packetRecu = new Paquet(data);
+        System.out.println("lastPacketId: " + lastPacketId);
+        System.out.println("getnumpacket: " + packetRecu.get_numPaquet());
         if ((lastPacketId) == packetRecu.get_numPaquet()) {
             lastPacketId = packetRecu.get_numPaquet() + 1;
             return super.recevoir(data);
