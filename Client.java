@@ -5,8 +5,8 @@ public class Client {
 
         DataInputStream in = new DataInputStream(System.in);
         BufferedReader d = new BufferedReader(new InputStreamReader(in));
-        //System.out.println("Enter file name: ");
-        String file = "C:\\Users\\sachl\\OneDrive\\Bureau\\Uni\\s3\\app3\\test.txt";// d.readLine();
+        // System.out.println("Enter file name: ");
+        String file = "B:\\USER\\Desktop\\s3app3\\fred.txt";// d.readLine();
 
         Application coucheApplication = Application.getInstance();
         Couche coucheTransport = Transport.getInstance();

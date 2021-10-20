@@ -28,7 +28,6 @@ public class Application extends Couche {
             inStream = new FileInputStream(Filename);
             BufferedInputStream in = new BufferedInputStream(inStream);
             stream = in.readAllBytes();
-            //  stream = Base64.getEncoder().encode(stream);
             in.close();
 
         } catch (FileNotFoundException e1) {
@@ -48,7 +47,7 @@ public class Application extends Couche {
         listeDesChosesRecus.add(data);
         Paquet packetRecu = new Paquet(data);
         if (packetRecu.get_numPaquetFin() == packetRecu.get_numPaquet()) {
-     
+
             Paquet paquet1 = new Paquet(listeDesChosesRecus.get(0));
             String nomFichierRecu = new String(paquet1.get_data()).replaceAll("\0", "");
 
