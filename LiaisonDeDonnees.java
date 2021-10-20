@@ -16,35 +16,40 @@ public class LiaisonDeDonnees extends Couche {
         return _instance;
     }
 
-    // ajouter des stats a la fin d'un transfert sur nombre packets transmis ou
-    // recu, nb perdus et nb erreur CRC
-    // done mettre des logs dans liasonDeDonnes.log de toutes les operations faite,
-    // avec le temps
-
+    /**
+     * Ajoute un CRC au packet, passer au prochain handler
+     * @param data un envoi contenant un byte[]
+     * @return le bool de l'envoi par le prochain handler ou false sur exception.
+     */
     @Override
     boolean envoyer(Envoi data) {
         try {
-
             // calculer crc
             LiaisonDeDonneesConverter lconv = new LiaisonDeDonneesConverter();
             data._header = lconv.AddCRC(data._data);
 
             // envoyer au serveur
             data.transmission();
-            super.envoyer(data);
-
-            logger.logClient("paquet" + " envoyé à: " + LocalDateTime.now());
-            totalEnvois += 1;
+            boolean result = super.envoyer(data);
+            if (result){
+                logger.logClient("paquet" + " envoyé à: " + LocalDateTime.now());
+                totalEnvois += 1;
+                return true;
+            }
+            logger.logClient("erreur de paquet" + " envoyé à: " + LocalDateTime.now());
+            return false;
 
         } catch (Exception e) {
             System.out.println(e);
-
+            return false;
         }
-        return true;
     }
 
-    // recevoir
-    // verify
+    /**
+     * Recoit de l'information, vérifie le CRC
+     * @param envoi envoie contenant un byte[]
+     * @return le retour du prochain handle de la chaine de responsabilité ou false si CRC fail
+     */
     @Override
     public boolean recevoir(Envoi envoi) {
         LiaisonDeDonneesConverter l = new LiaisonDeDonneesConverter();
@@ -52,7 +57,6 @@ public class LiaisonDeDonnees extends Couche {
         // _header = crc
 
         boolean verify = l.VerifyCRC(envoi._data, false);
-        verify = false;
 
         // TODO: bon numéro de packet
 
