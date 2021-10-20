@@ -50,7 +50,7 @@ public class Application extends Couche {
 
             Paquet paquet1 = new Paquet(listeDesChosesRecus.get(0));
             String nomFichierRecu = new String(paquet1.get_data()).replaceAll("\0", "");
-
+            listeDesChosesRecus.remove(0);
             try {
                 FileOutputStream writer = new FileOutputStream(nomFichierRecu);
 
@@ -63,7 +63,6 @@ public class Application extends Couche {
                     grosChunk = newGrosChunk;
 
                 }
-                // grosChunk = Base64.getDecoder().decode(grosChunk);
                 writer.write(grosChunk);
                 writer.close();
                 System.out.println("Fichier bien recu !");
