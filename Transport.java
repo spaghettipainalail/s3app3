@@ -21,6 +21,8 @@ public class Transport extends Couche {
             originalData = data;
 
         nbPaquetsRequis = (int) Math.ceil(nbPaquetsRequis / 200);
+        if (nbPaquetsRequis == 0)
+            nbPaquetsRequis++;
 
         // paquet du filename
         byte[] dataFilename = new byte[200];
@@ -39,10 +41,7 @@ public class Transport extends Couche {
             retour = super.envoyer(envoi);
             if (retour == false) {
                 i--;
-                /*envoi = new Envoi();
-                packToSend = new Paquet(i + 1, nbPaquetsRequis, originalData.getBytesArray(i * 200, (i + 1) * 200));
-                envoi._data = packToSend.getDataInBytes();
-                envoi._header = null;*/
+
             }
 
         }
@@ -55,7 +54,7 @@ public class Transport extends Couche {
 
         Paquet packetRecu = new Paquet(data);
         if ((lastPacketId) == packetRecu.get_numPaquet()) {
-            lastPacketId = packetRecu.get_numPaquet()+1;
+            lastPacketId = packetRecu.get_numPaquet() + 1;
             return super.recevoir(data);
         } else
             return false;
