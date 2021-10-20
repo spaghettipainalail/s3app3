@@ -19,7 +19,7 @@ public class LiaisonDeDonnees extends Couche {
     // avec le temps
     Logger logger = new Logger();
     public int totalEnvois = 0;
-    public int totalReçus = 0;
+    public int totalRecus = 0;
     public int totalErreurs = 0;
 
     @Override
