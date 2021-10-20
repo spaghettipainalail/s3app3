@@ -61,7 +61,7 @@ public class LiaisonDeDonnees extends Couche {
         // TODO: bon numéro de packet
 
         byte[] numPaquetBytes = new byte[14];
-        System.arraycopy(envoi._data, 18, numPaquetBytes, 0, 14);
+        System.arraycopy(envoi._data, 4, numPaquetBytes, 0, 14);
         String _numPaquet = new String(numPaquetBytes).replaceAll("\0", "");
         int num = Integer.parseInt((_numPaquet.split(":")[1]));
         System.out.println("num");
