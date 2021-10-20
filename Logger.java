@@ -28,7 +28,7 @@ public class Logger {
     }
 
     public void logServer(String s){
-        log(s, "liasonDeDonnesClient.log");
+        log(s, "liasonDeDonnesServeur.log");
     }
 
 }
