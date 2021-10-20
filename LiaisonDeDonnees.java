@@ -1,4 +1,5 @@
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 public class LiaisonDeDonnees extends Couche {
@@ -54,10 +55,13 @@ public class LiaisonDeDonnees extends Couche {
 
         boolean verify = l.VerifyCRC(envoi._data, false);
         verify = false;
-        ByteBuffer wrapped = ByteBuffer.wrap(envoi._data); // big-endian by default
 
-        //Todo: bon numéro de packet
-        int num = wrapped.getInt();
+        // TODO: bon numéro de packet
+        int numpaquet = 0;
+        byte[] numPaquetBytes = new byte[14];
+        System.arraycopy(envoi._data, 18, numPaquetBytes, 0, 14);
+        String _numPaquet = (new String(numPaquetBytes).replaceAll("\0", "")).getBytes();
+        _numPaquet = Integer.parseInt(new String(numPaquetBytes, StandardCharsets.UTF_8).split(":")[1]);
         if (verify) {
             envoi.decompresser(4); // enlever crc
             boolean transportOk = super.recevoir(envoi);
