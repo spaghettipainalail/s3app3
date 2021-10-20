@@ -26,7 +26,7 @@ public class CouchePhysiqueServeur extends Couche {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
 
-                // System.out.println(new String(packet.getData()));
+               
 
                 // donnees recu par le socket (246 octets)
                 Envoi dataRecu = new Envoi(packet.getData());
