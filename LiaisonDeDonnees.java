@@ -56,7 +56,7 @@ public class LiaisonDeDonnees extends Couche {
         // _data toute sauf le crc
         // _header = crc
 
-        boolean verify = l.VerifyCRC(envoi._data, false);
+        boolean verify = l.VerifyCRC(envoi._data, false);  /**********    MODIFIER ICI      *********/
         // TODO: bon numéro de packet
 
         byte[] numPaquetBytes = new byte[14];

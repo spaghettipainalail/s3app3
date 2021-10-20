@@ -72,7 +72,7 @@ public class LiaisonDeDonneesConverter {
         if (errors) {
             Random rand = new Random();
             int n = rand.nextInt(10);
-            if (n == 5) {
+            if (n < 3) {
                 return false;
             }
         }

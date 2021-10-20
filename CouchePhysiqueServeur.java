@@ -45,6 +45,7 @@ public class CouchePhysiqueServeur extends Couche {
                     logger.logServer("Erreur de réception, envoie d'un packet pas vide");
                     erreurEnvois += 1;
                     if (erreurEnvois == 3) {
+                        logger.logServer("Plus de 3 erreurs de réception, fermeture du serveur");
                         moreQuotes = false;
                     }
                     // redemander un nouveau packet
