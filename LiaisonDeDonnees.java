@@ -32,7 +32,7 @@ public class LiaisonDeDonnees extends Couche {
             data.transmission();
             boolean result = super.envoyer(data);
             if (result){
-                logger.logClient("paquet" + " envoyé à: " + LocalDateTime.now());
+                logger.logClient("paquet envoyé à: " + LocalDateTime.now());
                 totalEnvois += 1;
                 return true;
             }
@@ -64,6 +64,8 @@ public class LiaisonDeDonnees extends Couche {
         System.arraycopy(envoi._data, 18, numPaquetBytes, 0, 14);
         String _numPaquet = new String(numPaquetBytes).replaceAll("\0", "");
         int num = Integer.parseInt((_numPaquet.split(":")[1]));
+        System.out.println("num");
+        System.out.println(num);
         if (verify) {
             envoi.reception(4); // enlever crc
             boolean transportOk = super.recevoir(envoi);
