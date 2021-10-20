@@ -3,6 +3,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class LiaisonDeDonneesConverter {
+
+    /**
+     * Retourne un CRC
+     * @param data byte[] auquel ajouter un CRC
+     * @return un byte[] contenant le CRC
+     */
     public byte[] AddCRC(byte[] data) {
         String s = BytesToBinary(data);
         String crc = GetCRC(s);
@@ -15,12 +21,22 @@ public class LiaisonDeDonneesConverter {
         return newData;
     }
 
+    /**
+     * Change des byte[] en string binaire
+     * @param bytes le data à changer
+     * @return  la string binaire
+     */
     public String BytesToBinary(byte[] bytes) {
         String s = new String(bytes, StandardCharsets.UTF_8); // byte[] to string
         String binary = new BigInteger(s.getBytes()).toString(2); // string to binary string: "10000110110110101"
         return binary;
     }
 
+    /**
+     * Get un CRC
+     * @param s String binaire
+     * @return le CRC
+     */
     public String GetCRC(String s) {
         String CRCGenerator = "100000100110000010001110110110111";
         int generatorLength = CRCGenerator.length();
@@ -48,6 +64,12 @@ public class LiaisonDeDonneesConverter {
         return encoded.substring(encoded.length() - generatorLength + 1);
     }
 
+    /**
+     * Vérificaiton du CRC
+     * @param data  le data comprenant le CRC au début
+     * @param errors si on veut inclure des erreurs aléatoires représentant des problèmes physiques
+     * @return true si le CRC est valide
+     */
     public boolean VerifyCRC(byte[] data, Boolean errors) {
         // retrouver le texte
         byte[] textArray = new byte[data.length - 4];

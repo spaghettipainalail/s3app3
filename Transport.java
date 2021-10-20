@@ -13,6 +13,11 @@ public class Transport extends Couche {
         return _instance;
     }
 
+    /**
+     * Sépare l'information en petits paquets, ajoute une entête au data et l'envoie à liaisonDeDonneés. S'occupe de renvoyer les packets au besoin
+     * @param data du data
+     * @return  le retour du handler suivant.
+     */
     @Override
     boolean envoyer(Envoi data) {
         boolean retour = true;
@@ -48,6 +53,11 @@ public class Transport extends Couche {
         return retour;
     }
 
+    /**
+     * Valide selon l'ordre des packets recus
+     * @param data du data
+     * @return  return false si erreur d'ordre
+     */
     @Override
     boolean recevoir(Envoi data) {
         data.reception(42);
