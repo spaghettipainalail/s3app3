@@ -53,8 +53,8 @@ public class Transport extends Couche {
         data.reception(42);
 
         Paquet packetRecu = new Paquet(data);
-        if ((lastPacketId + 1) == packetRecu.get_numPaquet()) {
-            lastPacketId = packetRecu.get_numPaquet();
+        if ((lastPacketId) == packetRecu.get_numPaquet()) {
+            lastPacketId = packetRecu.get_numPaquet()+1;
             return super.recevoir(data);
         } else
             return false;
