@@ -5,7 +5,6 @@ public class Envoi {
     public byte[] _header;
 
     public Envoi() {
-
     }
 
     public Envoi(byte[] data) {
@@ -17,7 +16,7 @@ public class Envoi {
         _header = header;
     }
 
-    public void Compresser() {
+    public void transmission() {
         if (_header != null) {
             byte[] newData = new byte[_header.length + _data.length];
             System.arraycopy(_header, 0, newData, 0, _header.length);
@@ -27,19 +26,11 @@ public class Envoi {
         }
     }
 
-    public void decompresser(int tailleHeader) {
+    public void reception(int tailleHeader) {
         if (_data.length > tailleHeader) {
             _header = Arrays.copyOf(_data, tailleHeader);
             _data = Arrays.copyOfRange(_data, tailleHeader, _data.length);
         }
-    }
-
-    public byte[] get_data() {
-        return _data;
-    }
-
-    public void set_data(byte[] _data) {
-        this._data = _data;
     }
 
     public byte[] getBytesArray(int start, int end) {

@@ -1,9 +1,11 @@
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 public class LiaisonDeDonnees extends Couche {
     private static LiaisonDeDonnees _instance;
+    Logger logger = new Logger();
+    public int totalEnvois = 0;
+    public int totalRecus = 0;
+    public int totalErreurs = 0;
 
     private LiaisonDeDonnees() {
     }
@@ -18,10 +20,6 @@ public class LiaisonDeDonnees extends Couche {
     // recu, nb perdus et nb erreur CRC
     // done mettre des logs dans liasonDeDonnes.log de toutes les operations faite,
     // avec le temps
-    Logger logger = new Logger();
-    public int totalEnvois = 0;
-    public int totalRecus = 0;
-    public int totalErreurs = 0;
 
     @Override
     boolean envoyer(Envoi data) {
@@ -32,7 +30,7 @@ public class LiaisonDeDonnees extends Couche {
             data._header = lconv.AddCRC(data._data);
 
             // envoyer au serveur
-            data.Compresser();
+            data.transmission();
             super.envoyer(data);
 
             logger.logClient("paquet" + " envoyé à: " + LocalDateTime.now());
@@ -57,13 +55,13 @@ public class LiaisonDeDonnees extends Couche {
         verify = false;
 
         // TODO: bon numéro de packet
-        int numpaquet = 0;
+
         byte[] numPaquetBytes = new byte[14];
         System.arraycopy(envoi._data, 18, numPaquetBytes, 0, 14);
-        String _numPaquet = (new String(numPaquetBytes).replaceAll("\0", "")).getBytes();
-        _numPaquet = Integer.parseInt(new String(numPaquetBytes, StandardCharsets.UTF_8).split(":")[1]);
+        String _numPaquet = new String(numPaquetBytes).replaceAll("\0", "");
+        int num = Integer.parseInt((_numPaquet.split(":")[1]));
         if (verify) {
-            envoi.decompresser(4); // enlever crc
+            envoi.reception(4); // enlever crc
             boolean transportOk = super.recevoir(envoi);
             if (!transportOk) {
                 logger.logServer("paquet #" + num + " contient un erreur de numéro de paquet");

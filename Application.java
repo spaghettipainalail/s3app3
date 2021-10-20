@@ -5,11 +5,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Base64;
 
 public class Application extends Couche {
     private static Application _instance;
-    private ArrayList<Envoi> listeDesChosesRecus;
+    private final ArrayList<Envoi> listeDesChosesRecus;
 
     private Application() {
         listeDesChosesRecus = new ArrayList<Envoi>();
@@ -40,9 +39,6 @@ public class Application extends Couche {
             System.exit(1);
 
         }
-
-        // this will write or read the file complety and will pass a pointer to the
-        // layer transport.
 
         this.envoyer(new Envoi(stream, Filename.getBytes()));
     }

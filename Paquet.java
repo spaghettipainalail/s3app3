@@ -2,11 +2,11 @@ import java.nio.charset.StandardCharsets;
 
 public class Paquet {
     // header tcp
-    private int _numPaquet;
-    private int _numPaquetFin;
+    private final int _numPaquet;
+    private final int _numPaquetFin;
     private int _size;
     // data
-    private byte[] _data;
+    private final byte[] _data;
 
     public Paquet(int numPaquet, int numPaquetFin, byte[] data) {
         this._numPaquet = numPaquet;
@@ -20,11 +20,11 @@ public class Paquet {
         byte[] numPaquet = new byte[14];
         byte[] numPaquetFin = new byte[14];
         try {
-            System.arraycopy(("nump:" + _numPaquet).getBytes("UTF-8"), 0, numPaquet, 0,
+            System.arraycopy(("nump:" + _numPaquet).getBytes(StandardCharsets.UTF_8), 0, numPaquet, 0,
                     ("nump:" + _numPaquet).getBytes().length);
-            System.arraycopy(("size:" + _data.length).getBytes("UTF-8"), 0, size, 0,
+            System.arraycopy(("size:" + _data.length).getBytes(StandardCharsets.UTF_8), 0, size, 0,
                     ("size:" + _data.length).getBytes().length);
-            System.arraycopy(("numf:" + _numPaquetFin).getBytes("UTF-8"), 0, numPaquetFin, 0,
+            System.arraycopy(("numf:" + _numPaquetFin).getBytes(StandardCharsets.UTF_8), 0, numPaquetFin, 0,
                     ("numf:" + _numPaquetFin).getBytes().length);
         } catch (Exception e) {
         }
@@ -65,10 +65,6 @@ public class Paquet {
 
     public int get_numPaquetFin() {
         return _numPaquetFin;
-    }
-
-    public int get_size() {
-        return _size;
     }
 
     public byte[] get_data() {

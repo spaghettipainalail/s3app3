@@ -1,5 +1,3 @@
-import java.nio.charset.StandardCharsets;
-
 public class Transport extends Couche {
     private static Transport _instance;
     private int lastPacketId;
@@ -52,7 +50,7 @@ public class Transport extends Couche {
 
     @Override
     boolean recevoir(Envoi data) {
-        data.decompresser(42);
+        data.reception(42);
 
         Paquet packetRecu = new Paquet(data);
         if ((lastPacketId + 1) == packetRecu.get_numPaquet()) {

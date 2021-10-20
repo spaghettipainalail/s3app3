@@ -15,33 +15,6 @@ public class LiaisonDeDonneesConverter {
         return newData;
     }
 
-    public static final byte[] longToByteArray(long value) {
-        return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value };
-    }
-
-    public static final byte[] intToByteArray(int value) {
-        return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value };
-    }
-
-    public long BinaryToLong(String binary) {
-        char[] numbers = binary.toCharArray();
-        long result = 0;
-        for (int i = numbers.length - 1; i >= 0; i--)
-            if (numbers[i] == '1')
-                result += Math.pow(2, (numbers.length - i - 1));
-        return result;
-    }
-
-    public String StringToBinary(String s) {
-        String binary = new BigInteger(s.getBytes()).toString(2);
-        return binary;
-    }
-
-    public String BytesToString(byte[] bytes) {
-        String s = new String(bytes, StandardCharsets.UTF_8);
-        return s;
-    }
-
     public String BytesToBinary(byte[] bytes) {
         String s = new String(bytes, StandardCharsets.UTF_8); // byte[] to string
         String binary = new BigInteger(s.getBytes()).toString(2); // string to binary string: "10000110110110101"
@@ -93,7 +66,7 @@ public class LiaisonDeDonneesConverter {
         String s2 = String.format("%8s", Integer.toBinaryString(crcArray[1] & 0xFF)).replace(' ', '0');
         String s3 = String.format("%8s", Integer.toBinaryString(crcArray[2] & 0xFF)).replace(' ', '0');
         String s4 = String.format("%8s", Integer.toBinaryString(crcArray[3] & 0xFF)).replace(' ', '0');
-        String bestCRC = new String(s1 + s2 + s3 + s4); // le crc
+        String bestCRC = s1 + s2 + s3 + s4; // le crc
 
         // génération d'erreurs au besoin
         if (errors) {

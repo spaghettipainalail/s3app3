@@ -5,13 +5,12 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.Objects;
 
-public class SocketClient extends Couche {
-    // TODO rename couche physique
-    private String _adress;
-    private int _port;
-    Logger logger = new Logger();
+public class CouchePhysiqueClient extends Couche {
+    private final String _adress;
+    private final int _port;
+    private final Logger logger = new Logger();
 
-    public SocketClient(String InetAddress, int port) {
+    public CouchePhysiqueClient(String InetAddress, int port) {
         _adress = InetAddress;
         _port = port;
     }

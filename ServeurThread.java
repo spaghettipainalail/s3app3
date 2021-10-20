@@ -1,17 +1,16 @@
 import java.io.*;
 import java.net.*;
 
-public class QuoteServerThread extends Thread {
-    private SocketServeur instance;
+public class ServeurThread extends Thread {
+    private CouchePhysiqueServeur instance;
 
-    public QuoteServerThread(SocketServeur instance) throws IOException {
+    public ServeurThread(CouchePhysiqueServeur instance) throws IOException {
         this("QuoteServerThread");
         this.instance = instance;
     }
 
-    public QuoteServerThread(String name) throws IOException {
+    public ServeurThread(String name) throws IOException {
         super(name);
-
     }
 
     public void run() {
